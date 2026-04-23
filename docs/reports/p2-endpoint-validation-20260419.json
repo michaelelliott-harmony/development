@@ -1,0 +1,179 @@
+{
+  "validation_date": "2026-04-19",
+  "pilot_region": "Central Coast NSW",
+  "bounding_box": {
+    "south": -33.55,
+    "north": -33.15,
+    "west": 151.15,
+    "east": 151.75
+  },
+  "endpoints": {
+    "arcgis_rest_zoning": {
+      "status": "live",
+      "endpoint": "https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer",
+      "layer_id": 2,
+      "layer_name": "Land Zoning",
+      "feature_count_total": 3866,
+      "lga_filtered_count": {
+        "query": "LGA_NAME = 'Central Coast'",
+        "count": 3718
+      },
+      "crs": "assumed EPSG:4326 (geojson)",
+      "geometry_type": "Polygon",
+      "pagination_required": true,
+      "max_record_count": 1000,
+      "fields_confirmed": [
+        "SYM_CODE",
+        "LAY_CLASS",
+        "EPI_NAME",
+        "LGA_NAME"
+      ],
+      "fields_missing": [
+        "LAM_ID"
+      ],
+      "schema_drift_note": "LAM_ID does not exist in the EPI_Primary_Planning_Layers MapServer. Candidate natural keys in the source: OBJECTID (numeric, per-feature), PCO_REF_KEY (string, planning-instrument scoped). Recommend updating HARMONY_P2_ENTITY_SCHEMAS.md zoning_area dedup strategy to use PCO_REF_KEY (or OBJECTID + EPI_NAME composite) in place of LAM_ID.",
+      "issues": []
+    },
+    "wfs_cadastre": {
+      "status": "live",
+      "access_method": "ArcGIS REST (SIX) \u2014 WFS endpoints returned 400 on GetCapabilities across all candidates",
+      "endpoint_used": "https://maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Cadastre/MapServer/9",
+      "layer": {
+        "id": 9,
+        "name": "Lot",
+        "geometryType": "esriGeometryPolygon",
+        "field_count": 30
+      },
+      "feature_count_total": 133943,
+      "crs": {
+        "type": "name",
+        "properties": {
+          "name": "EPSG:4326"
+        }
+      },
+      "required_query_params": {
+        "inSR": 4326,
+        "outSR": 4326,
+        "note": "inSR=4326 is REQUIRED \u2014 layer's native SR is Web Mercator (102100). Without inSR the bbox silently matches 0 features."
+      },
+      "fields_confirmed": [
+        "lotnumber",
+        "plannumber",
+        "sectionnumber",
+        "cadid",
+        "planlabel",
+        "shape_Area"
+      ],
+      "fields_missing": [],
+      "schema_drift": {
+        "shapestarea": "actual field is 'shape_Area' (capital A) \u2014 mapping update required",
+        "plantype": "not a separate field \u2014 derive from planlabel prefix (e.g. 'DP787786' \u2192 plan_type='DP')",
+        "plantype_alternative": "classsubtype numeric code is available if a coded representation is preferred"
+      },
+      "issues": [
+        "Both WFS endpoint candidates (maps.six / portal.spatial) returned 400 on GetCapabilities \u2014 WFS is not publicly exposed. ArcGIS REST is the working alternative.",
+        "Candidate https://maps.six.nsw.gov.au/arcgis/services/public/NSW_Cadastre/MapServer/WFSServer returned 400",
+        "Candidate https://maps.six.nsw.gov.au/arcgis/services/public/NSW_Land_Parcel_Property_Theme/MapServer/WFSServer returned 400",
+        "No WFS candidate responded successfully"
+      ]
+    },
+    "osm_buildings": {
+      "status": "live",
+      "feature_count": 47319,
+      "tag_coverage": {
+        "building": 100.0,
+        "name": 75.0,
+        "addr:street": 25.0,
+        "addr:housenumber": 20.0,
+        "addr:postcode": 30.0,
+        "addr:suburb": 25.0,
+        "height": 0.0,
+        "building:levels": 15.0,
+        "roof:shape": 0.0,
+        "start_date": 5.0
+      },
+      "type_distribution": {
+        "retail": 4,
+        "yes": 15,
+        "industrial": 1
+      },
+      "issues": []
+    },
+    "osm_roads": {
+      "status": "live",
+      "feature_count": 32712,
+      "classification_breakdown": {
+        "footway": 8072,
+        "service": 7966,
+        "residential": 6389,
+        "path": 1743,
+        "tertiary": 1465,
+        "track": 1388,
+        "secondary": 1191,
+        "cycleway": 812,
+        "primary": 795,
+        "unclassified": 782,
+        "trunk": 734,
+        "steps": 431,
+        "motorway": 216,
+        "motorway_link": 163,
+        "trunk_link": 84,
+        "secondary_link": 79,
+        "living_street": 75,
+        "primary_link": 61,
+        "construction": 30,
+        "pedestrian": 20,
+        "tertiary_link": 17,
+        "raceway": 8,
+        "proposed": 8,
+        "busway": 7,
+        "escape": 6,
+        "bridleway": 6,
+        "corridor": 6,
+        "services": 1,
+        "rest_area": 1
+      },
+      "tag_coverage": {
+        "highway": 100.0,
+        "name": 36.4,
+        "ref": 4.6,
+        "surface": 55.2,
+        "lanes": 13.3,
+        "maxspeed": 16.8,
+        "oneway": 14.4,
+        "bridge": 2.3,
+        "tunnel": 0.1,
+        "lit": 1.3
+      },
+      "issues": []
+    },
+    "planning_portal_da": {
+      "status": "bad_request_all_variants",
+      "url": "https://api.apps1.nsw.gov.au/eplanning/data/v0/OnlineDA",
+      "error_observed": "{ \"ErrorMessage\": \"Required parameters for OnlineDA endpoint is not met.\" }",
+      "issues": []
+    },
+    "planning_portal_cdc": {
+      "status": "bad_request_all_variants",
+      "url": "https://api.apps1.nsw.gov.au/eplanning/data/v0/OnlineCDC",
+      "error_observed": "{ \"ErrorMessage\": \"Required parameters for OnlineCDC endpoint is not met.\" }",
+      "issues": []
+    },
+    "planning_portal_pcc": {
+      "status": "not_found",
+      "url": "https://api.apps1.nsw.gov.au/eplanning/data/v0/OnlineOC",
+      "error_observed": "{ \"statusCode\": 404, \"message\": \"Resource not found\" }",
+      "issues": []
+    }
+  },
+  "sprint_1_readiness": "ready",
+  "milestone_7_readiness": "blocked_pending_data_broker",
+  "blockers": [],
+  "recommendations": [
+    "ENTITY SCHEMA UPDATE REQUIRED: zoning_area.LAM_ID does not exist in source. Update HARMONY_P2_ENTITY_SCHEMAS.md to map source_feature_id from PCO_REF_KEY (or composite OBJECTID + EPI_NAME). Layer 2 of EPI_Primary_Planning_Layers confirmed as Land Zoning.",
+    "ENTITY SCHEMA UPDATE REQUIRED: cadastral_lot.shapestarea \u2192 shape_Area (case change). cadastral_lot.plantype \u2192 derive from planlabel prefix (e.g. DP787786 \u2192 'DP'). No WFS adapter required \u2014 use ArcGIS REST adapter with inSR=4326.",
+    "ArcGIS REST adapter MUST implement pagination (max 1000 records per query confirmed empirically).",
+    "OSM building height/levels coverage low (height=0.0%, levels=15.0%). Accept for MVP per Gap #8 in pillar brief.",
+    "MILESTONE 7 BLOCKED on Data Broker access confirmation (email sent 2026-04-20). DA and CDC endpoints are reachable but require undocumented parameter (likely subscription key \u2014 api.apps1.nsw.gov.au is Azure API Management). PCC/OC endpoint returns 404 under both 'OnlinePCC' and 'OnlineOC' names; real endpoint name must come from data dictionary."
+  ]
+}

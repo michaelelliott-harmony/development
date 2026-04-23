@@ -1,0 +1,717 @@
+{
+  "endpoint_candidates": [
+    "https://maps.six.nsw.gov.au/arcgis/services/public/NSW_Cadastre/MapServer/WFSServer",
+    "https://maps.six.nsw.gov.au/arcgis/services/public/NSW_Land_Parcel_Property_Theme/MapServer/WFSServer"
+  ],
+  "endpoint_used": "https://maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Cadastre/MapServer/9",
+  "capabilities_status": 400,
+  "feature_types": [],
+  "lot_feature_type": null,
+  "describe_feature_type": {},
+  "sample_query": {
+    "http_status": 200,
+    "feature_count": 5,
+    "total_count_in_bbox": 133943,
+    "crs": {
+      "type": "name",
+      "properties": {
+        "name": "EPSG:4326"
+      }
+    },
+    "geometry_type": "Polygon",
+    "field_names": [
+      "cadid",
+      "centroidid",
+      "changetype",
+      "classsubtype",
+      "controllingauthorityoid",
+      "createdate",
+      "enddate",
+      "hasstratum",
+      "itslotid",
+      "itstitlestatus",
+      "lastupdate",
+      "lotidstring",
+      "lotnumber",
+      "modifieddate",
+      "msoid",
+      "objectid",
+      "planlabel",
+      "planlotarea",
+      "planlotareaunits",
+      "plannumber",
+      "planoid",
+      "processstate",
+      "sectionnumber",
+      "shape_Area",
+      "shape_Length",
+      "shapeuuid",
+      "startdate",
+      "stratumlevel",
+      "urbanity"
+    ],
+    "required_fields_present": {
+      "lotnumber": true,
+      "plannumber": true,
+      "sectionnumber": true,
+      "cadid": true,
+      "planlabel": true,
+      "shape_Area": true
+    },
+    "sample_feature": {
+      "type": "Feature",
+      "id": 8360,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              151.50292845117897,
+              -33.248207060617304
+            ],
+            [
+              151.50292055386473,
+              -33.24820618257745
+            ],
+            [
+              151.50291005705066,
+              -33.24820506131582
+            ],
+            [
+              151.50289953328704,
+              -33.24820398606916
+            ],
+            [
+              151.5028889825741,
+              -33.248202964349986
+            ],
+            [
+              151.50287844196708,
+              -33.248201978315876
+            ],
+            [
+              151.5028679002372,
+              -33.24820103641852
+            ],
+            [
+              151.50285735850733,
+              -33.24820013114526
+            ],
+            [
+              151.50284680779438,
+              -33.248199270947865
+            ],
+            [
+              151.50283623911506,
+              -33.248198446435474
+            ],
+            [
+              151.50282566145253,
+              -33.24819765760814
+            ],
+            [
+              151.5028151107396,
+              -33.248196913856646
+            ],
+            [
+              151.50280454206026,
+              -33.24819620485114
+            ],
+            [
+              151.50279396439777,
+              -33.24819554186052
+            ],
+            [
+              151.50278338785816,
+              -33.248194923006665
+            ],
+            [
+              151.50277281019572,
+              -33.248194331386166
+            ],
+            [
+              151.5027622235501,
+              -33.248193802684014
+            ],
+            [
+              151.50275164588766,
+              -33.24819330121517
+            ],
+            [
+              151.5027454789532,
+              -33.2481929875624
+            ],
+            [
+              151.50270740835145,
+              -33.24836687029863
+            ],
+            [
+              151.50269663418257,
+              -33.2484159746914
+            ],
+            [
+              151.50267371366806,
+              -33.24852073721061
+            ],
+            [
+              151.50268783181562,
+              -33.248521409589536
+            ],
+            [
+              151.50285353954453,
+              -33.248528428248356
+            ],
+            [
+              151.50295020725224,
+              -33.24855911163207
+            ],
+            [
+              151.50295199939126,
+              -33.248554836017654
+            ],
+            [
+              151.50295630232142,
+              -33.24854678625504
+            ],
+            [
+              151.5029618247147,
+              -33.24853907737642
+            ],
+            [
+              151.5029680814806,
+              -33.248531798594236
+            ],
+            [
+              151.50297503780956,
+              -33.24852497714177
+            ],
+            [
+              151.50298261173032,
+              -33.248518648704035
+            ],
+            [
+              151.50298965789088,
+              -33.24851367347547
+            ],
+            [
+              151.50288388238906,
+              -33.24845824914718
+            ],
+            [
+              151.50289095549897,
+              -33.24841833271576
+            ],
+            [
+              151.50292845117897,
+              -33.248207060617304
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "objectid": 8360,
+        "cadid": 100026584,
+        "createdate": 724636800000,
+        "modifieddate": 1318459876000,
+        "controllingauthorityoid": 2,
+        "planoid": 591923,
+        "plannumber": 787786,
+        "planlabel": "DP787786",
+        "itstitlestatus": 1,
+        "itslotid": 2675559,
+        "stratumlevel": 0,
+        "hasstratum": 1,
+        "classsubtype": 1,
+        "lotnumber": "90",
+        "sectionnumber": null,
+        "planlotarea": null,
+        "planlotareaunits": null,
+        "startdate": 1370762444000,
+        "enddate": 32503680000000,
+        "lastupdate": 1370762503916,
+        "msoid": 2845622,
+        "centroidid": null,
+        "shapeuuid": "edeca6c0-f953-3f97-8429-c8d86480f38e",
+        "changetype": "M",
+        "lotidstring": "90//DP787786",
+        "processstate": null,
+        "urbanity": "U",
+        "shape_Length": 151.640631831533,
+        "shape_Area": 1026.6533688551312
+      }
+    }
+  },
+  "issues": [
+    "Candidate https://maps.six.nsw.gov.au/arcgis/services/public/NSW_Cadastre/MapServer/WFSServer returned 400",
+    "Candidate https://maps.six.nsw.gov.au/arcgis/services/public/NSW_Land_Parcel_Property_Theme/MapServer/WFSServer returned 400",
+    "No WFS candidate responded successfully"
+  ],
+  "round2_probes": [
+    {
+      "url": "https://maps.six.nsw.gov.au/arcgis/services/public/NSW_Cadastre/MapServer/WFSServer",
+      "http_status": 400,
+      "content_type": "text/html;charset=utf-8",
+      "body_start": "<html><head><title>ArcGIS Server Error</title><style><!--H1 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:22px;} H2 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:16px;} H3 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:14px;} BODY {font-family:Tahoma,Arial,sans-serif;color:black;backgro"
+    },
+    {
+      "url": "https://maps.six.nsw.gov.au/arcgis/services/public/NSW_Land_Parcel_Property_Theme/MapServer/WFSServer",
+      "http_status": 400,
+      "content_type": "text/html;charset=utf-8",
+      "body_start": "<html><head><title>ArcGIS Server Error</title><style><!--H1 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:22px;} H2 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:16px;} H3 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:14px;} BODY {font-family:Tahoma,Arial,sans-serif;color:black;backgro"
+    },
+    {
+      "url": "https://portal.spatial.nsw.gov.au/server/services/NSW_Cadastre/MapServer/WFSServer",
+      "http_status": 499,
+      "content_type": "text/html;charset=utf-8",
+      "body_start": "<html><head><title>ArcGIS Server Error</title><style><!--H1 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:22px;} H2 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:16px;} H3 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:14px;} BODY {font-family:Tahoma,Arial,sans-serif;color:black;backgro"
+    },
+    {
+      "url": "https://portal.spatial.nsw.gov.au/server/services/NSW_Land_Parcel_Property_Theme/MapServer/WFSServer",
+      "http_status": 400,
+      "content_type": "text/html;charset=utf-8",
+      "body_start": "<html><head><title>ArcGIS Server Error</title><style><!--H1 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:22px;} H2 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:16px;} H3 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:14px;} BODY {font-family:Tahoma,Arial,sans-serif;color:black;backgro"
+    },
+    {
+      "url": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Cadastre/MapServer",
+      "http_status": 200,
+      "content_type": "application/json;charset=UTF-8",
+      "body_start": "{\"error\":{\"code\":404,\"message\":\"Service NSW_Cadastre/MapServer not found \",\"details\":[]}}",
+      "layers": [],
+      "verdict": "rest_live"
+    },
+    {
+      "url": "https://maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Cadastre/MapServer",
+      "http_status": 200,
+      "content_type": "text/plain;charset=utf-8",
+      "body_start": "{\"currentVersion\":10.51,\"serviceDescription\":\"\",\"mapName\":\"Cadastre\",\"description\":\"Dynamic Map Service of Plan, Section and Lot extents designed primarily for display over raster data. Control of the display of symbology, labelling or both is available. \",\"copyrightText\":\"\u00a9 Department of Finance, Services & Innovation 2018\",\"supportsDynamicLayers\":false,\"layers\":[{\"id\":0,\"name\":\"Cadastre_Labels\",",
+      "layers": [
+        {
+          "id": 0,
+          "name": "Cadastre_Labels",
+          "type": null
+        },
+        {
+          "id": 1,
+          "name": "PlanExtent_Labels",
+          "type": null
+        },
+        {
+          "id": 2,
+          "name": "SectionExtent_Labels",
+          "type": null
+        },
+        {
+          "id": 3,
+          "name": "Lot_Labels",
+          "type": null
+        },
+        {
+          "id": 4,
+          "name": "Cadastre",
+          "type": null
+        },
+        {
+          "id": 5,
+          "name": "Large_Rural_PlanExtent",
+          "type": null
+        },
+        {
+          "id": 6,
+          "name": "Rural_PlanExtent",
+          "type": null
+        },
+        {
+          "id": 7,
+          "name": "SectionExtent",
+          "type": null
+        },
+        {
+          "id": 8,
+          "name": "PlanExtent",
+          "type": null
+        },
+        {
+          "id": 9,
+          "name": "Lot",
+          "type": null
+        }
+      ],
+      "verdict": "rest_live"
+    },
+    {
+      "url": "https://maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Land_Parcel_Property_Theme/MapServer",
+      "http_status": 200,
+      "content_type": "text/plain;charset=utf-8",
+      "body_start": "{\"error\":{\"code\":500,\"message\":\"Service public/NSW_Land_Parcel_Property_Theme/MapServer not found \",\"details\":[]}}",
+      "layers": [],
+      "verdict": "rest_live"
+    }
+  ],
+  "round2_sample": {
+    "layer": {
+      "id": 9,
+      "name": "Lot",
+      "geometryType": "esriGeometryPolygon"
+    },
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "OBJECTID"
+      },
+      {
+        "name": "shape",
+        "type": "esriFieldTypeGeometry",
+        "alias": "Shape"
+      },
+      {
+        "name": "cadid",
+        "type": "esriFieldTypeInteger",
+        "alias": "cadid"
+      },
+      {
+        "name": "createdate",
+        "type": "esriFieldTypeDate",
+        "alias": "createdate"
+      },
+      {
+        "name": "modifieddate",
+        "type": "esriFieldTypeDate",
+        "alias": "modifieddate"
+      },
+      {
+        "name": "controllingauthorityoid",
+        "type": "esriFieldTypeInteger",
+        "alias": "controllingauthorityoid"
+      },
+      {
+        "name": "planoid",
+        "type": "esriFieldTypeInteger",
+        "alias": "planoid"
+      },
+      {
+        "name": "plannumber",
+        "type": "esriFieldTypeInteger",
+        "alias": "plannumber"
+      },
+      {
+        "name": "planlabel",
+        "type": "esriFieldTypeString",
+        "alias": "planlabel"
+      },
+      {
+        "name": "itstitlestatus",
+        "type": "esriFieldTypeSmallInteger",
+        "alias": "ITSTitleStatus"
+      },
+      {
+        "name": "itslotid",
+        "type": "esriFieldTypeInteger",
+        "alias": "itslotid"
+      },
+      {
+        "name": "stratumlevel",
+        "type": "esriFieldTypeSmallInteger",
+        "alias": "StratumLevel"
+      },
+      {
+        "name": "hasstratum",
+        "type": "esriFieldTypeSmallInteger",
+        "alias": "HasStratum"
+      },
+      {
+        "name": "classsubtype",
+        "type": "esriFieldTypeInteger",
+        "alias": "ClassSubtype"
+      },
+      {
+        "name": "lotnumber",
+        "type": "esriFieldTypeString",
+        "alias": "lotnumber"
+      },
+      {
+        "name": "sectionnumber",
+        "type": "esriFieldTypeString",
+        "alias": "sectionnumber"
+      },
+      {
+        "name": "planlotarea",
+        "type": "esriFieldTypeDouble",
+        "alias": "planlotarea"
+      },
+      {
+        "name": "planlotareaunits",
+        "type": "esriFieldTypeString",
+        "alias": "planlotareaunits"
+      },
+      {
+        "name": "startdate",
+        "type": "esriFieldTypeDate",
+        "alias": "startdate"
+      },
+      {
+        "name": "enddate",
+        "type": "esriFieldTypeDate",
+        "alias": "enddate"
+      },
+      {
+        "name": "lastupdate",
+        "type": "esriFieldTypeDate",
+        "alias": "lastupdate"
+      },
+      {
+        "name": "msoid",
+        "type": "esriFieldTypeInteger",
+        "alias": "msoid"
+      },
+      {
+        "name": "centroidid",
+        "type": "esriFieldTypeInteger",
+        "alias": "centroidid"
+      },
+      {
+        "name": "shapeuuid",
+        "type": "esriFieldTypeString",
+        "alias": "shapeuuid"
+      },
+      {
+        "name": "changetype",
+        "type": "esriFieldTypeString",
+        "alias": "changetype"
+      },
+      {
+        "name": "lotidstring",
+        "type": "esriFieldTypeString",
+        "alias": "lotidstring"
+      },
+      {
+        "name": "processstate",
+        "type": "esriFieldTypeString",
+        "alias": "processstate"
+      },
+      {
+        "name": "urbanity",
+        "type": "esriFieldTypeString",
+        "alias": "urbanity"
+      },
+      {
+        "name": "shape_Length",
+        "type": "esriFieldTypeDouble",
+        "alias": "shape_Length"
+      },
+      {
+        "name": "shape_Area",
+        "type": "esriFieldTypeDouble",
+        "alias": "shape_Area"
+      }
+    ],
+    "extent": {
+      "xmin": 15695971.703500003,
+      "ymin": -4500719.260499999,
+      "xmax": 17709213.067500003,
+      "ymax": -3268784.9516250007,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857
+      }
+    },
+    "maxRecordCount": 1000,
+    "layer_meta_note": null,
+    "sample_http_status": 200,
+    "sample_count": 0,
+    "crs": {
+      "type": "name",
+      "properties": {
+        "name": "EPSG:4326"
+      }
+    },
+    "total_count": 0
+  },
+  "access_method": "ArcGIS REST (SIX) \u2014 WFS endpoints returned 400 on GetCapabilities across all candidates",
+  "layer": {
+    "id": 9,
+    "name": "Lot",
+    "geometryType": "esriGeometryPolygon",
+    "field_count": 30
+  },
+  "fields": [
+    {
+      "name": "objectid",
+      "type": "esriFieldTypeOID",
+      "alias": "OBJECTID"
+    },
+    {
+      "name": "shape",
+      "type": "esriFieldTypeGeometry",
+      "alias": "Shape"
+    },
+    {
+      "name": "cadid",
+      "type": "esriFieldTypeInteger",
+      "alias": "cadid"
+    },
+    {
+      "name": "createdate",
+      "type": "esriFieldTypeDate",
+      "alias": "createdate"
+    },
+    {
+      "name": "modifieddate",
+      "type": "esriFieldTypeDate",
+      "alias": "modifieddate"
+    },
+    {
+      "name": "controllingauthorityoid",
+      "type": "esriFieldTypeInteger",
+      "alias": "controllingauthorityoid"
+    },
+    {
+      "name": "planoid",
+      "type": "esriFieldTypeInteger",
+      "alias": "planoid"
+    },
+    {
+      "name": "plannumber",
+      "type": "esriFieldTypeInteger",
+      "alias": "plannumber"
+    },
+    {
+      "name": "planlabel",
+      "type": "esriFieldTypeString",
+      "alias": "planlabel"
+    },
+    {
+      "name": "itstitlestatus",
+      "type": "esriFieldTypeSmallInteger",
+      "alias": "ITSTitleStatus"
+    },
+    {
+      "name": "itslotid",
+      "type": "esriFieldTypeInteger",
+      "alias": "itslotid"
+    },
+    {
+      "name": "stratumlevel",
+      "type": "esriFieldTypeSmallInteger",
+      "alias": "StratumLevel"
+    },
+    {
+      "name": "hasstratum",
+      "type": "esriFieldTypeSmallInteger",
+      "alias": "HasStratum"
+    },
+    {
+      "name": "classsubtype",
+      "type": "esriFieldTypeInteger",
+      "alias": "ClassSubtype"
+    },
+    {
+      "name": "lotnumber",
+      "type": "esriFieldTypeString",
+      "alias": "lotnumber"
+    },
+    {
+      "name": "sectionnumber",
+      "type": "esriFieldTypeString",
+      "alias": "sectionnumber"
+    },
+    {
+      "name": "planlotarea",
+      "type": "esriFieldTypeDouble",
+      "alias": "planlotarea"
+    },
+    {
+      "name": "planlotareaunits",
+      "type": "esriFieldTypeString",
+      "alias": "planlotareaunits"
+    },
+    {
+      "name": "startdate",
+      "type": "esriFieldTypeDate",
+      "alias": "startdate"
+    },
+    {
+      "name": "enddate",
+      "type": "esriFieldTypeDate",
+      "alias": "enddate"
+    },
+    {
+      "name": "lastupdate",
+      "type": "esriFieldTypeDate",
+      "alias": "lastupdate"
+    },
+    {
+      "name": "msoid",
+      "type": "esriFieldTypeInteger",
+      "alias": "msoid"
+    },
+    {
+      "name": "centroidid",
+      "type": "esriFieldTypeInteger",
+      "alias": "centroidid"
+    },
+    {
+      "name": "shapeuuid",
+      "type": "esriFieldTypeString",
+      "alias": "shapeuuid"
+    },
+    {
+      "name": "changetype",
+      "type": "esriFieldTypeString",
+      "alias": "changetype"
+    },
+    {
+      "name": "lotidstring",
+      "type": "esriFieldTypeString",
+      "alias": "lotidstring"
+    },
+    {
+      "name": "processstate",
+      "type": "esriFieldTypeString",
+      "alias": "processstate"
+    },
+    {
+      "name": "urbanity",
+      "type": "esriFieldTypeString",
+      "alias": "urbanity"
+    },
+    {
+      "name": "shape_Length",
+      "type": "esriFieldTypeDouble",
+      "alias": "shape_Length"
+    },
+    {
+      "name": "shape_Area",
+      "type": "esriFieldTypeDouble",
+      "alias": "shape_Area"
+    }
+  ],
+  "required_query_params": {
+    "inSR": 4326,
+    "outSR": 4326,
+    "note": "inSR=4326 is REQUIRED \u2014 layer's native SR is Web Mercator (102100). Without inSR the bbox silently matches 0 features."
+  },
+  "schema_vs_entity_model": {
+    "matches": [
+      "cadid",
+      "lotnumber",
+      "plannumber",
+      "sectionnumber",
+      "planlabel"
+    ],
+    "drift": {
+      "shapestarea": "actual field is 'shape_Area' (capital A) \u2014 mapping update required",
+      "plantype": "not a separate field \u2014 derive from planlabel prefix (e.g. 'DP787786' \u2192 plan_type='DP')",
+      "plantype_alternative": "classsubtype numeric code is available if a coded representation is preferred"
+    },
+    "bonus_fields": [
+      "lotidstring",
+      "urbanity",
+      "startdate",
+      "enddate",
+      "itstitlestatus",
+      "hasstratum",
+      "stratumlevel"
+    ]
+  }
+}

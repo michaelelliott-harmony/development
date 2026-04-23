@@ -1,0 +1,359 @@
+[
+  {
+    "canonical_id": "hc_xny4v2xm9",
+    "object_type": "cell",
+    "object_domain": "spatial.substrate.cell",
+    "cell_key": "hsam:r00:gbl:czvtf6fgxvptcxjv",
+    "resolution_level": 0,
+    "cube_face": 1,
+    "face_grid_u": 0,
+    "face_grid_v": 0,
+    "edge_length_m": 12742000.0,
+    "area_m2": 162358564000000.0,
+    "distortion_factor": 1.0,
+    "centroid_ecef": {
+      "x": -6378137.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "centroid_geodetic": {
+      "latitude": 0.0,
+      "longitude": 180.0
+    },
+    "adjacent_cell_keys": [
+      "hsam:r00:gbl:g4e8e8hpvbzcpxyr",
+      "hsam:r00:gbl:4mv482rss3yztecf",
+      "hsam:r00:gbl:521h5zx0f626vw00",
+      "hsam:r00:gbl:6109d6ag2rjtf5ne"
+    ],
+    "human_alias": null,
+    "alias_namespace": null,
+    "friendly_name": null,
+    "known_names": [],
+    "semantic_labels": [],
+    "status": "active",
+    "schema_version": "0.1.3",
+    "created_at": "2026-04-10T00:00:00Z",
+    "updated_at": "2026-04-10T00:00:00Z",
+    "valid_from": null,
+    "valid_to": null,
+    "version_of": null,
+    "temporal_status": null,
+    "references": {
+      "parent_cell_id": null,
+      "child_cell_ids": [],
+      "entity_ids": [],
+      "dataset_ids": [],
+      "state_ids": [],
+      "asset_bundles": [],
+      "successor_id": null
+    },
+    "_description": "Level 0 planetary face containing Central Coast NSW"
+  },
+  {
+    "canonical_id": "hc_pxa5p5293",
+    "object_type": "cell",
+    "object_domain": "spatial.substrate.cell",
+    "cell_key": "hsam:r04:cc:yfme2b4kb7j69717",
+    "resolution_level": 4,
+    "cube_face": 1,
+    "face_grid_u": 197,
+    "face_grid_v": 32,
+    "edge_length_m": 67726.1,
+    "area_m2": 4586825016.57,
+    "distortion_factor": 1.360688,
+    "centroid_ecef": {
+      "x": -4682694.646873,
+      "y": 2542556.859044,
+      "z": -3493729.209191
+    },
+    "centroid_geodetic": {
+      "latitude": -33.42861433,
+      "longitude": 151.49942252
+    },
+    "adjacent_cell_keys": [
+      "hsam:r04:cc:zp6j3r7y52gdx8nc",
+      "hsam:r04:cc:w7mn83s68vx114cb",
+      "hsam:r04:cc:0xcdm1rnj86mprv6",
+      "hsam:r04:cc:ywfvfeqv3869seye"
+    ],
+    "human_alias": "CC-101",
+    "alias_namespace": "cc.au.nsw.cc",
+    "friendly_name": "Gosford District",
+    "known_names": [],
+    "semantic_labels": [
+      "Central Coast NSW pilot region"
+    ],
+    "status": "active",
+    "schema_version": "0.1.3",
+    "created_at": "2026-04-10T00:00:00Z",
+    "updated_at": "2026-04-10T00:00:00Z",
+    "valid_from": null,
+    "valid_to": null,
+    "version_of": null,
+    "temporal_status": null,
+    "references": {
+      "parent_cell_id": null,
+      "child_cell_ids": [],
+      "entity_ids": [],
+      "dataset_ids": [],
+      "state_ids": [],
+      "asset_bundles": [],
+      "successor_id": null
+    },
+    "_description": "Level 4 district scale, Gosford metropolitan area"
+  },
+  {
+    "canonical_id": "hc_79gtqz21n",
+    "object_type": "cell",
+    "object_domain": "spatial.substrate.cell",
+    "cell_key": "hsam:r06:cc:za6bzq7gfknrzd5z",
+    "resolution_level": 6,
+    "cube_face": 1,
+    "face_grid_u": 3167,
+    "face_grid_v": 518,
+    "edge_length_m": 4238.69,
+    "area_m2": 17966481.64,
+    "distortion_factor": 1.362554,
+    "centroid_ecef": {
+      "x": -4676282.780889,
+      "y": 2556200.475198,
+      "z": -3492370.367857
+    },
+    "centroid_geodetic": {
+      "latitude": -33.41393557,
+      "longitude": 151.33762248
+    },
+    "adjacent_cell_keys": [
+      "hsam:r06:cc:kmxjyyqdze6nhftg",
+      "hsam:r06:cc:5j6mk5e21066s4c7",
+      "hsam:r06:cc:gecd1a6aahjktdq6",
+      "hsam:r06:cc:s13rxcffgaemfc90"
+    ],
+    "human_alias": "CC-42",
+    "alias_namespace": "cc.au.nsw.cc",
+    "friendly_name": "Gosford CBD Neighbourhood",
+    "known_names": [],
+    "semantic_labels": [
+      "Central Coast NSW pilot region"
+    ],
+    "status": "active",
+    "schema_version": "0.1.3",
+    "created_at": "2026-04-10T00:00:00Z",
+    "updated_at": "2026-04-10T00:00:00Z",
+    "valid_from": null,
+    "valid_to": null,
+    "version_of": null,
+    "temporal_status": null,
+    "references": {
+      "parent_cell_id": null,
+      "child_cell_ids": [],
+      "entity_ids": [],
+      "dataset_ids": [],
+      "state_ids": [],
+      "asset_bundles": [],
+      "successor_id": null
+    },
+    "_description": "Level 6 neighbourhood scale, Gosford CBD area"
+  },
+  {
+    "canonical_id": "hc_6crwdveed",
+    "object_type": "cell",
+    "object_domain": "spatial.substrate.cell",
+    "cell_key": "hsam:r08:cc:g2f39nh7keq4h9f0",
+    "resolution_level": 8,
+    "cube_face": 1,
+    "face_grid_u": 50678,
+    "face_grid_v": 8290,
+    "edge_length_m": 264.93,
+    "area_m2": 70189.16,
+    "distortion_factor": 1.362628,
+    "centroid_ecef": {
+      "x": -4676028.440765,
+      "y": 2555847.393443,
+      "z": -3492965.275843
+    },
+    "centroid_geodetic": {
+      "latitude": -33.42036171,
+      "longitude": 151.3396419
+    },
+    "adjacent_cell_keys": [
+      "hsam:r08:cc:fdbez2t74v8xvxwj",
+      "hsam:r08:cc:bv7cnw136jc19d74",
+      "hsam:r08:cc:ggwt8hre31zytp60",
+      "hsam:r08:cc:nsm3epny9z0jqytv"
+    ],
+    "human_alias": "CC-421",
+    "alias_namespace": "cc.au.nsw.cc",
+    "friendly_name": "Gosford Waterfront Cell",
+    "known_names": [],
+    "semantic_labels": [
+      "Central Coast NSW pilot region"
+    ],
+    "status": "active",
+    "schema_version": "0.1.3",
+    "created_at": "2026-04-10T00:00:00Z",
+    "updated_at": "2026-04-10T00:00:00Z",
+    "valid_from": null,
+    "valid_to": null,
+    "version_of": null,
+    "temporal_status": null,
+    "references": {
+      "parent_cell_id": null,
+      "child_cell_ids": [],
+      "entity_ids": [],
+      "dataset_ids": [],
+      "state_ids": [],
+      "asset_bundles": [],
+      "successor_id": null
+    },
+    "_description": "Level 8 parcel scale, Gosford waterfront (test vector 1)"
+  },
+  {
+    "canonical_id": "hc_vsh4zw2h6",
+    "object_type": "cell",
+    "object_domain": "spatial.substrate.cell",
+    "cell_key": "hsam:r10:cc:dpya1spfwh11mf83",
+    "resolution_level": 10,
+    "cube_face": 1,
+    "face_grid_u": 809664,
+    "face_grid_v": 132581,
+    "edge_length_m": 16.55,
+    "area_m2": 273.84,
+    "distortion_factor": 1.361788,
+    "centroid_ecef": {
+      "x": -4678906.799507,
+      "y": 2546787.350215,
+      "z": -3495708.858988
+    },
+    "centroid_geodetic": {
+      "latitude": -33.4500037,
+      "longitude": 151.43999588
+    },
+    "adjacent_cell_keys": [
+      "hsam:r10:cc:fbzcee03avx1zr2v",
+      "hsam:r10:cc:wc8dkw85jvmc9a2c",
+      "hsam:r10:cc:e28f9bhd9265csk1",
+      "hsam:r10:cc:aa6vcjcxz4yjbbc0"
+    ],
+    "human_alias": "CC-1089",
+    "alias_namespace": "cc.au.nsw.cc",
+    "friendly_name": "Terrigal Beach Feature",
+    "known_names": [],
+    "semantic_labels": [
+      "Central Coast NSW pilot region"
+    ],
+    "status": "active",
+    "schema_version": "0.1.3",
+    "created_at": "2026-04-10T00:00:00Z",
+    "updated_at": "2026-04-10T00:00:00Z",
+    "valid_from": null,
+    "valid_to": null,
+    "version_of": null,
+    "temporal_status": null,
+    "references": {
+      "parent_cell_id": null,
+      "child_cell_ids": [],
+      "entity_ids": [],
+      "dataset_ids": [],
+      "state_ids": [],
+      "asset_bundles": [],
+      "successor_id": null
+    },
+    "_description": "Level 10 room scale, Terrigal Beach area"
+  },
+  {
+    "entity_id": "ent_bld_k3f9m2",
+    "object_type": "entity",
+    "object_domain": "spatial.substrate.entity.bld",
+    "entity_subtype": "bld",
+    "primary_cell_id": "hc_6crwdveed",
+    "primary_cell_key": "hsam:r08:cc:g2f39nh7keq4h9f0",
+    "secondary_cell_ids": [],
+    "metadata": {
+      "storeys": 3,
+      "use": "commercial",
+      "year_built": 2019
+    },
+    "human_alias": "ENT-1",
+    "alias_namespace": "au.nsw.central_coast.entities",
+    "friendly_name": "Gosford Waterfront Building A",
+    "known_names": [
+      "Waterfront Building A",
+      "Building A Gosford"
+    ],
+    "semantic_labels": [
+      "commercial building",
+      "waterfront",
+      "Central Coast NSW pilot region"
+    ],
+    "status": "active",
+    "schema_version": "0.1.3",
+    "created_at": "2026-04-10T00:00:00Z",
+    "updated_at": "2026-04-10T00:00:00Z",
+    "_description": "Entity: 3-storey commercial building on Gosford waterfront"
+  },
+  {
+    "entity_id": "ent_prc_h7w4n1",
+    "object_type": "entity",
+    "object_domain": "spatial.substrate.entity.prc",
+    "entity_subtype": "prc",
+    "primary_cell_id": "hc_79gtqz21n",
+    "primary_cell_key": "hsam:r06:cc:za6bzq7gfknrzd5z",
+    "secondary_cell_ids": [],
+    "metadata": {
+      "lot": "12",
+      "plan": "DP1234567",
+      "area_sqm": 850.0
+    },
+    "human_alias": "ENT-2",
+    "alias_namespace": "au.nsw.central_coast.entities",
+    "friendly_name": "CBD Parcel Lot 12",
+    "known_names": [
+      "Lot 12 DP1234567"
+    ],
+    "semantic_labels": [
+      "land parcel",
+      "CBD",
+      "Central Coast NSW pilot region"
+    ],
+    "status": "active",
+    "schema_version": "0.1.3",
+    "created_at": "2026-04-10T00:00:00Z",
+    "updated_at": "2026-04-10T00:00:00Z",
+    "_description": "Entity: land parcel in Gosford CBD neighbourhood"
+  },
+  {
+    "entity_id": "ent_rod_b2c8v5",
+    "object_type": "entity",
+    "object_domain": "spatial.substrate.entity.rod",
+    "entity_subtype": "rod",
+    "primary_cell_id": "hc_vsh4zw2h6",
+    "primary_cell_key": "hsam:r10:cc:dpya1spfwh11mf83",
+    "secondary_cell_ids": [],
+    "metadata": {
+      "road_name": "Terrigal Drive",
+      "classification": "local",
+      "lanes": 2,
+      "surface": "bitumen"
+    },
+    "human_alias": "ENT-3",
+    "alias_namespace": "au.nsw.central_coast.entities",
+    "friendly_name": "Terrigal Drive Segment",
+    "known_names": [
+      "Terrigal Drive",
+      "Terrigal Dr"
+    ],
+    "semantic_labels": [
+      "road segment",
+      "local road",
+      "Terrigal",
+      "Central Coast NSW pilot region"
+    ],
+    "status": "active",
+    "schema_version": "0.1.3",
+    "created_at": "2026-04-10T00:00:00Z",
+    "updated_at": "2026-04-10T00:00:00Z",
+    "_description": "Entity: road segment on Terrigal Drive near Terrigal Beach"
+  }
+]

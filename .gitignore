@@ -1,0 +1,127 @@
+# Harmony — .gitignore
+# Created 2026-04-23 to protect security-sensitive paths and keep the repo lean.
+
+# ===========================================================================
+# Confidential — never commit
+# ===========================================================================
+# The Defence Pathway Readiness Note and any follow-on confidential security
+# artefacts live in security/confidential/. These are classified
+# "Internal — Confidential. For Mikey only." and must not enter any public
+# or shared remote, intentionally or otherwise.
+security/confidential/
+
+# ===========================================================================
+# Secrets — never commit
+# ===========================================================================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+secrets.json
+
+# ===========================================================================
+# Python — virtualenvs, caches, compiled
+# ===========================================================================
+.venv/
+.venv*/
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+pytest-cache-files-*/
+*.egg-info/
+.mypy_cache/
+.ruff_cache/
+
+# ===========================================================================
+# Node / JS (if any pillar adds JS tooling)
+# ===========================================================================
+node_modules/
+
+# ===========================================================================
+# OS & editor cruft
+# ===========================================================================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*~
+
+# ===========================================================================
+# Claude Code local settings (per-machine; commit .claude/settings.json only)
+# ===========================================================================
+.claude/settings.local.json
+
+# ===========================================================================
+# Large data files — geospatial and tabular dumps
+# ===========================================================================
+# These formats are typically multi-MB to multi-GB. Authored fixtures and
+# sample records under a few hundred KB are fine and can be unignored case
+# by case with `!path/to/file.ext`. Anything larger should live outside the
+# repo in the dataset registry / object store.
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.qpj
+*.gpkg
+*.gdb
+*.kml
+*.kmz
+*.tif
+*.tiff
+*.geotiff
+*.las
+*.laz
+*.parquet
+*.arrow
+*.feather
+*.pbf
+*.mbtiles
+*.nc
+*.hdf
+*.hdf5
+*.h5
+*.gsb
+*.rat
+
+# CSV/TSV dumps — keep small authored fixtures with `!...`
+*.csv
+*.tsv
+!04_pillars/**/fixtures/**/*.csv
+!data/fixtures/**/*.csv
+
+# Database dumps and binary blobs
+*.dump
+*.sqlite
+*.sqlite3
+*.db
+*.bak
+
+# ===========================================================================
+# Build / distribution
+# ===========================================================================
+build/
+dist/
+*.whl
+*.tar.gz
+!04_pillars/**/files.zip
+
+# ===========================================================================
+# Ingestion scratch and quarantine exports
+# ===========================================================================
+# Ingestion runs produce working files outside source control. Quarantine
+# exports and run reports may contain problematic payloads and must not be
+# committed.
+scratch/
+outputs/
+ingestion-runs/
+quarantine-exports/

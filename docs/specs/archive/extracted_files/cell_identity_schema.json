@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harmony.dev/schemas/v0.1.2/cell_identity_schema.json",
+  "title": "Harmony Cell Identity Record",
+  "description": "Locked schema for a cell record in the Harmony Identity Registry. Milestone 1, v0.1.2. Includes reserved fields for temporal versioning, named-entity resolution, and dual fidelity.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "canonical_id",
+    "object_type",
+    "object_domain",
+    "cell_key",
+    "status",
+    "schema_version",
+    "created_at",
+    "updated_at",
+    "references"
+  ],
+  "properties": {
+    "canonical_id": {
+      "type": "string",
+      "pattern": "^hc_[a-z0-9]{9}$",
+      "description": "Immutable canonical identifier for this cell."
+    },
+    "object_type": {
+      "const": "cell"
+    },
+    "object_domain": {
+      "type": "string",
+      "pattern": "^spatial\\.substrate\\.cell(\\.[a-z0-9_]+)*$"
+    },
+    "cell_key": {
+      "type": "string",
+      "pattern": "^hsam:r[0-9]{2}:[a-z0-9]{2,8}:[a-z0-9]{5}$",
+      "description": "Deterministic substrate key derived from geometry and resolution. Required."
+    },
+    "resolution_level": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 15
+    },
+    "human_alias": {
+      "type": ["string", "null"],
+      "pattern": "^[A-Z]{2,4}-[0-9]{1,6}$"
+    },
+    "alias_namespace": {
+      "type": ["string", "null"],
+      "pattern": "^[a-z]{2,4}(\\.[a-z0-9_]{2,32}){2,5}$"
+    },
+    "friendly_name": {
+      "type": ["string", "null"],
+      "maxLength": 200
+    },
+    "known_names": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 200
+      },
+      "default": [],
+      "description": "RESERVED for named-entity resolution. Multi-valued natural-language names. Indexed by registry, resolved by Pillar 5 Conversational Spatial Agent. See ADR-010."
+    },
+    "semantic_labels": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 100
+      },
+      "default": []
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "active", "deprecated", "retired"]
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "0.1.2"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "valid_from": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "RESERVED for temporal versioning. Owned by Pillar 4. Real-world validity start. See ADR-009."
+    },
+    "valid_to": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "RESERVED for temporal versioning. Owned by Pillar 4. Real-world validity end. See ADR-009."
+    },
+    "version_of": {
+      "type": ["string", "null"],
+      "pattern": "^hc_[a-z0-9]{9}$",
+      "description": "RESERVED for temporal versioning. Owned by Pillar 4. Original canonical_id this record is a temporal version of. See ADR-009."
+    },
+    "temporal_status": {
+      "type": ["string", "null"],
+      "enum": ["current", "historical", "superseded", "projected", null],
+      "description": "RESERVED for temporal versioning. Owned by Pillar 4. See ADR-009."
+    },
+    "fidelity_coverage": {
+      "type": ["object", "null"],
+      "description": "RESERVED for dual fidelity. Owned by Pillar 2. Describes which fidelity types are available."
+    },
+    "lod_availability": {
+      "type": ["object", "null"],
+      "description": "RESERVED for dual fidelity. Owned by Pillar 2. Maps LOD levels to availability status."
+    },
+    "asset_bundle_count": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0,
+      "description": "RESERVED for dual fidelity. Denormalised count of asset bundles."
+    },
+    "references": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parent_cell_id", "child_cell_ids", "entity_ids"],
+      "properties": {
+        "parent_cell_id": {
+          "type": ["string", "null"],
+          "pattern": "^hc_[a-z0-9]{9}$"
+        },
+        "child_cell_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^hc_[a-z0-9]{9}$"
+          },
+          "default": []
+        },
+        "entity_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^ent_[a-z]{3}_[a-z0-9]{6}$"
+          },
+          "default": []
+        },
+        "dataset_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^ds_[a-z0-9]{8}$"
+          },
+          "default": []
+        },
+        "state_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^st_[a-z0-9]{10}$"
+          },
+          "default": []
+        },
+        "asset_bundles": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "default": [],
+          "description": "RESERVED for dual fidelity. Owned by Pillar 2. Typed references to photorealistic and structural geometry asset bundles."
+        },
+        "successor_id": {
+          "type": ["string", "null"],
+          "pattern": "^hc_[a-z0-9]{9}$"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "human_alias": { "type": "string" } },
+        "required": ["human_alias"]
+      },
+      "then": {
+        "required": ["alias_namespace"],
+        "properties": {
+          "alias_namespace": { "type": "string" }
+        }
+      }
+    }
+  ]
+}

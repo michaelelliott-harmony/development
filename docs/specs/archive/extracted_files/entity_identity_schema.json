@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harmony.dev/schemas/v0.1.2/entity_identity_schema.json",
+  "title": "Harmony Entity Identity Record",
+  "description": "Locked schema for an entity record in the Harmony Identity Registry. Milestone 1, v0.1.2. Includes reserved fields for temporal versioning and named-entity resolution.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "canonical_id",
+    "object_type",
+    "object_domain",
+    "entity_subtype",
+    "status",
+    "schema_version",
+    "created_at",
+    "updated_at",
+    "references"
+  ],
+  "properties": {
+    "canonical_id": {
+      "type": "string",
+      "pattern": "^ent_[a-z]{3}_[a-z0-9]{6}$"
+    },
+    "object_type": {
+      "const": "entity"
+    },
+    "object_domain": {
+      "type": "string",
+      "pattern": "^entity\\.[a-z0-9_]+(\\.[a-z0-9_]+)*$"
+    },
+    "entity_subtype": {
+      "type": "string",
+      "enum": ["bld", "prc", "rod", "wtr", "veg", "inf"]
+    },
+    "human_alias": {
+      "type": ["string", "null"],
+      "pattern": "^[A-Z]{2,4}-[0-9]{1,6}$"
+    },
+    "alias_namespace": {
+      "type": ["string", "null"],
+      "pattern": "^[a-z]{2,4}(\\.[a-z0-9_]{2,32}){2,5}$"
+    },
+    "friendly_name": {
+      "type": ["string", "null"],
+      "maxLength": 200
+    },
+    "known_names": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 200
+      },
+      "default": [],
+      "description": "RESERVED for named-entity resolution. Multi-valued natural-language names. Indexed by registry, resolved by Pillar 5 Conversational Spatial Agent. See ADR-010."
+    },
+    "semantic_labels": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 100
+      },
+      "default": []
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "active", "deprecated", "retired"]
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "0.1.2"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "valid_from": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "RESERVED for temporal versioning. Owned by Pillar 4. See ADR-009."
+    },
+    "valid_to": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "RESERVED for temporal versioning. Owned by Pillar 4. See ADR-009."
+    },
+    "version_of": {
+      "type": ["string", "null"],
+      "pattern": "^ent_[a-z]{3}_[a-z0-9]{6}$",
+      "description": "RESERVED for temporal versioning. Owned by Pillar 4. See ADR-009."
+    },
+    "temporal_status": {
+      "type": ["string", "null"],
+      "enum": ["current", "historical", "superseded", "projected", null],
+      "description": "RESERVED for temporal versioning. Owned by Pillar 4. See ADR-009."
+    },
+    "references": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary_cell_id"],
+      "properties": {
+        "primary_cell_id": {
+          "type": "string",
+          "pattern": "^hc_[a-z0-9]{9}$"
+        },
+        "secondary_cell_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^hc_[a-z0-9]{9}$"
+          },
+          "default": []
+        },
+        "dataset_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^ds_[a-z0-9]{8}$"
+          },
+          "default": []
+        },
+        "state_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^st_[a-z0-9]{10}$"
+          },
+          "default": []
+        },
+        "successor_id": {
+          "type": ["string", "null"],
+          "pattern": "^ent_[a-z]{3}_[a-z0-9]{6}$"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "human_alias": { "type": "string" } },
+        "required": ["human_alias"]
+      },
+      "then": {
+        "required": ["alias_namespace"]
+      }
+    }
+  ]
+}

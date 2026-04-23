@@ -1,0 +1,83 @@
+{
+  "endpoints": {
+    "planning_portal_da": {
+      "url": "https://api.apps1.nsw.gov.au/eplanning/data/v0/OnlineDA",
+      "attempts": [
+        {
+          "variant": "array-council-with-date-range",
+          "http_status": 400,
+          "body_start": "{ \"ErrorMessage\": \"Required parameters for OnlineDA endpoint is not met.\" }"
+        },
+        {
+          "variant": "array-council-no-dates",
+          "http_status": 400,
+          "body_start": "{ \"ErrorMessage\": \"Required parameters for OnlineDA endpoint is not met.\" }"
+        },
+        {
+          "variant": "string-council-with-date-range",
+          "http_status": 400,
+          "body_start": "{ \"ErrorMessage\": \"Required parameters for OnlineDA endpoint is not met.\" }"
+        },
+        {
+          "variant": "date-range-only",
+          "http_status": 400,
+          "body_start": "{ \"ErrorMessage\": \"Required parameters for OnlineDA endpoint is not met.\" }"
+        }
+      ],
+      "status": "bad_request_all_variants"
+    },
+    "planning_portal_cdc": {
+      "url": "https://api.apps1.nsw.gov.au/eplanning/data/v0/OnlineCDC",
+      "attempts": [
+        {
+          "variant": "array-council-with-date-range",
+          "http_status": 400,
+          "body_start": "{ \"ErrorMessage\": \"Required parameters for OnlineCDC endpoint is not met.\" }"
+        },
+        {
+          "variant": "array-council-no-dates",
+          "http_status": 400,
+          "body_start": "{ \"ErrorMessage\": \"Required parameters for OnlineCDC endpoint is not met.\" }"
+        },
+        {
+          "variant": "string-council-with-date-range",
+          "http_status": 400,
+          "body_start": "{ \"ErrorMessage\": \"Required parameters for OnlineCDC endpoint is not met.\" }"
+        },
+        {
+          "variant": "date-range-only",
+          "http_status": 400,
+          "body_start": "{ \"ErrorMessage\": \"Required parameters for OnlineCDC endpoint is not met.\" }"
+        }
+      ],
+      "status": "bad_request_all_variants"
+    },
+    "planning_portal_pcc": {
+      "url": "https://api.apps1.nsw.gov.au/eplanning/data/v0/OnlineOC",
+      "attempts": [
+        {
+          "variant": "array-council-with-date-range",
+          "http_status": 404,
+          "body_start": "{ \"statusCode\": 404, \"message\": \"Resource not found\" }"
+        },
+        {
+          "variant": "array-council-no-dates",
+          "http_status": 404,
+          "body_start": "{ \"statusCode\": 404, \"message\": \"Resource not found\" }"
+        },
+        {
+          "variant": "string-council-with-date-range",
+          "http_status": 404,
+          "body_start": "{ \"statusCode\": 404, \"message\": \"Resource not found\" }"
+        },
+        {
+          "variant": "date-range-only",
+          "http_status": 404,
+          "body_start": "{ \"statusCode\": 404, \"message\": \"Resource not found\" }"
+        }
+      ],
+      "status": "not_found"
+    }
+  },
+  "note": "PCC endpoint name 'OnlinePCC' returns 404 \u2014 attempted OnlineOC (Occupation Certificate) as the likely real endpoint. Full resolution requires NSW data dictionary from Data Broker."
+}
