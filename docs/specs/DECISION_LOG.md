@@ -232,6 +232,34 @@ resolution API with distinct auth scope.
 
 ---
 
+### DEC-016 | 2026-04-24 | Pillar 3 — Rendering Asset Format
+
+**Decision:** Rendering pipeline adopts **glTF 2.0** (ISO/IEC 40588) as
+canonical 3D asset format. All geometry must use **Draco compression
+level 7** with 14-bit vertex quantization and 10-bit normal quantization.
+Asset bundle schema includes nullable `geometry_source_url`, required
+`geometry_inferred` boolean, and `fidelity_coverage` structure with three
+valid states: `available`, `pending`, `splat_pending`. When
+`geometry_inferred = true`, schema-level CHECK constraint atomically
+enforces `fidelity_coverage.photorealistic.status = 'splat_pending'`.
+Human-facing geometry delivery target: <100ms (provisional, contingent
+on benchmarking).
+
+**Impact:** Gap 1 (Asset Encoding) formally closed. Gap 2 (Rendering
+Performance) partially closed with 100ms target accepted as design goal.
+All Pillar 2 ingestion adapters must emit glTF+Draco. Pillar 3 rendering
+clients must respect fidelity states when deciding to render. Schema
+migration required: add `geometry_inferred` boolean, `fidelity_coverage`
+JSON structure, and CHECK constraint to `asset_bundles` table.
+
+**ADR:** ADR-022 — Rendering Asset Format and Data Contract
+
+**Status:** Proposed
+
+**Spec version:** Pending V1.2.0
+
+---
+
 ## Unprocessed Content
 
 A set of variation files existed under `Master_Spec_Variations/variations/pending/`
