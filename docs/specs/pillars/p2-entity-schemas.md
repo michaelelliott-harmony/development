@@ -35,7 +35,7 @@ All entity types share a common base schema inherited from the Pillar 1 entity m
 **Source:** NSW Planning Portal — EPI Land Zoning (ArcGIS REST)
 **Fidelity class:** structural
 **Default resolution level floor:** r06 (large zoning polygons)
-**Dedup strategy:** Source-system ID matching on `LAM_ID` or `SYM_CODE` + LGA combination
+**Dedup strategy:** Source-system ID matching on `PCO_REF_KEY` or `SYM_CODE` + LGA combination
 
 ### Attribute Mapping
 
@@ -45,7 +45,7 @@ All entity types share a common base schema inherited from the Pillar 1 entity m
 | `LAY_CLASS` | `zone_name` | string | Yes | Full zone name (e.g., "Low Density Residential", "General Industrial") |
 | `EPI_NAME` | `epi_name` | string | Yes | The Environmental Planning Instrument name (e.g., "Central Coast Local Environmental Plan 2022") |
 | `LGA_NAME` | `lga_name` | string | Yes | Local Government Area name |
-| `LAM_ID` | `source_feature_id` | string | Yes | Unique ID within the EPI dataset — used for dedup |
+| `PCO_REF_KEY` | `source_feature_id` | string | Yes | Unique string ID within the EPI dataset — used for dedup. Note: `LAM_ID` does not exist in the live API; `PCO_REF_KEY` is the correct field (confirmed by endpoint validation 2026-04-19). `OBJECTID` is also available but is numeric and may not be stable across service updates. |
 | `SYM_CODE` | → `known_names` | string | Auto | Zone code added to known_names (e.g., "R2") |
 | `LAY_CLASS` | → `known_names` | string | Auto | Zone name added to known_names |
 | (geometry) | `geometry` | MultiPolygon | Yes | Zone boundary polygon |
@@ -65,29 +65,31 @@ All entity types share a common base schema inherited from the Pillar 1 entity m
 - Zone codes follow the NSW Standard Instrument LEP format. The `SYM_CODE` field is the primary human-readable identifier.
 - Large zoning polygons (e.g., a rural RU1 zone covering several square kilometres) will span many cells. The geometry-adaptive resolution assignment will place these at higher levels (r04–r06). Smaller urban zones (a B1 commercial strip) will be assigned to r08–r10.
 - The `epi_name` field is critical for provenance — it identifies which specific planning instrument defined this zone.
+- **Pagination required:** The ArcGIS REST endpoint caps results at 1,000 per page (`exceededTransferLimit=true` observed). The adapter must paginate using `resultOffset` and `resultRecordCount`. Total feature count for Central Coast bounding box: 3,866 (3,718 within Central Coast LGA).
+- **Schema drift note (2026-04-19):** The original schema assumed `LAM_ID` as the unique identifier. Endpoint validation confirmed this field does not exist in the live API. `PCO_REF_KEY` (string) and `OBJECTID` (numeric) are the available candidates. `PCO_REF_KEY` is preferred as it is a string and more likely stable across service updates.
 
 ---
 
 ## Entity Type 2: `cadastral_lot`
 
-**Source:** NSW Spatial Services — DCDB Lot dataset (WFS)
+**Source:** NSW Spatial Services — DCDB Lot dataset (ArcGIS REST at maps.six.nsw.gov.au, layer ID 9)
 **Fidelity class:** structural
 **Default resolution level floor:** r08 (parcel scale)
-**Dedup strategy:** Source-system ID matching on `LOT` + `PLAN` + `SECTION` composite key
+**Dedup strategy:** Source-system ID matching on lot + plan composite key derived from `planlabel`
 
 ### Attribute Mapping
 
-| Source Field (WFS) | Harmony Field | Type | Required | Notes |
+| Source Field (ArcGIS REST) | Harmony Field | Type | Required | Notes |
 |---|---|---|---|---|
 | `cadid` | `cad_id` | string | Yes | Unique cadastral identifier |
 | `lotnumber` | `lot_number` | string | Yes | Lot number within the plan |
 | `sectionnumber` | `section_number` | string | No | Section number (may be null) |
-| `plannumber` | `plan_number` | string | Yes | Deposited Plan (DP) number |
-| `plantype` | `plan_type` | string | Yes | Plan type code (DP, SP, etc.) |
-| `planlabel` | `plan_label` | string | Yes | Combined lot/section/plan string (e.g., "1//DP123456") |
-| `shapestarea` | `area_sqm` | float | No | Lot area in square metres |
+| `planlabel` | `plan_label` | string | Yes | Combined lot/section/plan string (e.g., "1//DP123456"). This is the primary human-readable identifier. |
+| (derived from `planlabel`) | `plan_number` | string | Yes | Extracted from `planlabel` — the numeric portion after the plan type prefix (e.g., "787786" from "DP787786"). |
+| (derived from `planlabel`) | `plan_type` | string | Yes | Extracted from `planlabel` — the alphabetic prefix (e.g., "DP", "SP"). Note: `plantype` does not exist as a separate field in the live API. The `classsubtype` field offers a numeric alternative but `planlabel` parsing is more reliable. |
+| `shape_Area` | `area_sqm` | float | No | Lot area in square metres. Note: field name is `shape_Area` (mixed case), not `shapestarea` as originally assumed. |
 | `createdate` | `observation_date` | date | No | Date the lot was created in the DCDB |
-| `lotnumber` + `plannumber` | → `known_names` | string | Auto | Combined as "Lot {lot_number} {plan_type}{plan_number}" |
+| `lotnumber` + derived `plan_type` + derived `plan_number` | → `known_names` | string | Auto | Combined as "Lot {lot_number} {plan_type}{plan_number}" |
 | `planlabel` | → `known_names` | string | Auto | The human-readable lot/plan label |
 | (geometry) | `geometry` | MultiPolygon | Yes | Lot boundary polygon |
 
@@ -101,9 +103,16 @@ All entity types share a common base schema inherited from the Pillar 1 entity m
 | `observation_date` | Use `createdate` from source if available |
 | `fidelity_class` | `structural` |
 
+### ArcGIS REST Access Notes
+
+- **Endpoint:** `https://maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Cadastre/MapServer/9` (Lot layer)
+- **Critical:** `inSR=4326` must be included in all bbox queries. The layer's native spatial reference is Web Mercator (102100). Without `inSR=4326`, the bbox coordinates are interpreted as Web Mercator and silently return 0 features.
+- **WFS is not available.** Both WFS endpoints (`maps.six.nsw.gov.au` and `portal.spatial.nsw.gov.au`) returned 400 on GetCapabilities. WFS is not publicly exposed. ArcGIS REST is the only working programmatic access path.
+- **Total features in Central Coast bounding box:** 133,943
+
 ### Dedup Composite Key
 
-The natural deduplication key for NSW cadastral data is the composite: `lot_number` + `section_number` + `plan_type` + `plan_number`. This uniquely identifies any parcel in NSW. The `cad_id` field is also unique but is an internal DCDB identifier that may not be stable across data releases.
+The natural deduplication key for NSW cadastral data is derived from `planlabel`: parse the plan type prefix and plan number, combine with `lot_number` and `section_number`. This uniquely identifies any parcel in NSW. The `cad_id` field is also unique but is an internal DCDB identifier that may not be stable across data releases.
 
 **Dedup rule:** Match on composite key first. If a duplicate is found with different geometry, retain the version with the more recent `createdate`. Log the replacement.
 
