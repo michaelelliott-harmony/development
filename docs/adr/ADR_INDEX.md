@@ -33,6 +33,7 @@
 | ADR-019 | Tier Enforcement Architecture | Proposed | `ADR-019-tier-enforcement-architecture.md` |
 | ADR-020 | CRS Normalisation Strategy | Proposed | `ADR-020-crs-normalisation-strategy.md` |
 | ADR-021 | Geometry Quarantine Lifecycle | Proposed | `ADR-021-geometry-quarantine-lifecycle.md` |
+| ADR-022 | Rendering Asset Format and Data Contract | Proposed | `ADR-022-rendering-asset-format-and-data-contract.md` |
 
 ---
 
@@ -52,7 +53,7 @@ ADR-016 currently here.
 
 ## Next Available Number
 
-ADR-022.
+ADR-023.
 
 > Note: ADR-017 was allocated to the Stage 2 implementation ADR even though
 > the Stage 2 dispatch brief (`docs/dispatch/dispatch-p1-stage2-20260420/`)
