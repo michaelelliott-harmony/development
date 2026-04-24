@@ -45,7 +45,7 @@ All entity types share a common base schema inherited from the Pillar 1 entity m
 | `LAY_CLASS` | `zone_name` | string | Yes | Full zone name (e.g., "Low Density Residential", "General Industrial") |
 | `EPI_NAME` | `epi_name` | string | Yes | The Environmental Planning Instrument name (e.g., "Central Coast Local Environmental Plan 2022") |
 | `LGA_NAME` | `lga_name` | string | Yes | Local Government Area name |
-| `PCO_REF_KEY` | `source_feature_id` | string | Yes | Unique string ID within the EPI dataset — used for dedup. Note: `LAM_ID` does not exist in the live API; `PCO_REF_KEY` is the correct field (confirmed by endpoint validation 2026-04-19). `OBJECTID` is also available but is numeric and may not be stable across service updates. |
+| `PCO_REF_KEY` | `source_feature_id` | string | Yes | Unique string ID within the EPI dataset — primary dedup key. Confirmed as correct field by endpoint validation 2026-04-19. `OBJECTID` is also available but is numeric and may not be stable across service updates. |
 | `SYM_CODE` | → `known_names` | string | Auto | Zone code added to known_names (e.g., "R2") |
 | `LAY_CLASS` | → `known_names` | string | Auto | Zone name added to known_names |
 | (geometry) | `geometry` | MultiPolygon | Yes | Zone boundary polygon |
@@ -66,7 +66,7 @@ All entity types share a common base schema inherited from the Pillar 1 entity m
 - Large zoning polygons (e.g., a rural RU1 zone covering several square kilometres) will span many cells. The geometry-adaptive resolution assignment will place these at higher levels (r04–r06). Smaller urban zones (a B1 commercial strip) will be assigned to r08–r10.
 - The `epi_name` field is critical for provenance — it identifies which specific planning instrument defined this zone.
 - **Pagination required:** The ArcGIS REST endpoint caps results at 1,000 per page (`exceededTransferLimit=true` observed). The adapter must paginate using `resultOffset` and `resultRecordCount`. Total feature count for Central Coast bounding box: 3,866 (3,718 within Central Coast LGA).
-- **Schema drift note (2026-04-19):** The original schema assumed `LAM_ID` as the unique identifier. Endpoint validation confirmed this field does not exist in the live API. `PCO_REF_KEY` (string) and `OBJECTID` (numeric) are the available candidates. `PCO_REF_KEY` is preferred as it is a string and more likely stable across service updates.
+- **Endpoint validation note (2026-04-19):** `PCO_REF_KEY` (string) confirmed as the correct unique identifier via live endpoint validation. `OBJECTID` (numeric) is also present but `PCO_REF_KEY` is preferred as it is more likely to remain stable across service updates.
 
 ---
 
