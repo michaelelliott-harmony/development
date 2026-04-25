@@ -260,6 +260,33 @@ JSON structure, and CHECK constraint to `asset_bundles` table.
 
 ---
 
+### DEC-017 | 2026-04-26 | Pillar 1 — API Extension
+
+**Decision:** Added `PATCH /cells/{cell_key}/fidelity` endpoint to the
+Pillar 1 API. Purpose-built, narrow endpoint with full-replacement semantics
+on `cell_metadata.fidelity_coverage` JSONB column. Dr. Voss Option B —
+not a general metadata PATCH. Validation enforced at the API layer:
+(a) both `structural` and `photorealistic` objects required; (b) `status`
+restricted to defined enum values; (c) `status=available` requires non-null
+`source`; (d) Tier 4 exclusion (`source_tier=4` cannot have `status=available`)
+enforced in API validation layer since no new DB migration is required or
+permitted without Mikey's gate. The `fidelity_coverage` JSONB column already
+existed on `cell_metadata` (reserved in Stage 1 schema). No migration needed.
+
+**Impact:** Pillar 2 ingestion pipeline can now write fidelity coverage data
+to the correct long-term location (cell records) rather than the interim
+entity-metadata workaround. Dr. Adeyemi's pipeline should migrate from the
+entity-metadata interim to `PATCH /cells/{cell_key}/fidelity`.
+
+**ADR:** None — implementation decision covered by existing ADR-022 (Tier 4
+exclusion), ADR-013 (API Layer Architecture). No new ADR required.
+
+**Status:** Accepted
+
+**Spec version:** Pending V1.2.0
+
+---
+
 ## Unprocessed Content
 
 A set of variation files existed under `Master_Spec_Variations/variations/pending/`
