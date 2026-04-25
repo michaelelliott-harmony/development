@@ -2,9 +2,11 @@
 #
 # Cell HTTP Endpoints
 
+import json
 import re
 from fastapi import APIRouter, Query, Response, status
 import psycopg2
+import psycopg2.extras
 
 from harmony.services.api import _bootstrap  # noqa: F401 — configures sys.path
 import registry  # noqa: E402  (sys.path set up by _bootstrap)
@@ -19,6 +21,7 @@ from harmony.services.api.models import (
     VolumetricCellCreate,
     CellAdjacencyResponse,
     VerticalAdjacency,
+    FidelityCoverageUpdate,
 )
 
 router = APIRouter(tags=["cells"])
@@ -364,3 +367,61 @@ def create_volumetric_cell(body: VolumetricCellCreate, response: Response):
 
     response.status_code = status.HTTP_200_OK if existed else status.HTTP_201_CREATED
     return _shape_cell(record)
+
+
+# -------------------------------------------------------------------------
+# Fidelity coverage update — PATCH /cells/{cell_key}/fidelity
+# Dr. Voss Option B: purpose-built, narrow, validated at API + DB layers.
+# Full replacement semantics — no merge. Pillar 2 is the primary consumer.
+# -------------------------------------------------------------------------
+
+@router.patch(
+    "/cells/{cell_key}/fidelity",
+    response_model=CellResponse,
+    responses={
+        200: {"description": "Fidelity coverage updated — full replacement applied"},
+        404: {"description": "Cell not found"},
+        422: {"description": "Validation failed"},
+    },
+    summary="Update fidelity coverage for a cell (full replacement)",
+)
+def update_cell_fidelity(cell_key: str, body: FidelityCoverageUpdate):
+    """Replace the fidelity_coverage JSONB field on the cell identified by
+    cell_key.  Both structural and photorealistic objects are required.
+    Full replacement — calling with the same body twice produces the same
+    result (idempotent by construction).
+    """
+    fidelity_json = json.dumps(body.model_dump())
+
+    with get_connection() as conn:
+        # Lookup + update in a single round-trip via RETURNING. JOIN against
+        # identity_registry so the response carries status/schema_version/
+        # created_at/updated_at without a second query.
+        with conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
+            cur.execute(
+                """
+                UPDATE cell_metadata cm
+                SET    fidelity_coverage = %s::jsonb
+                FROM   identity_registry ir
+                WHERE  ir.canonical_id = cm.cell_id
+                  AND  cm.cell_key     = %s
+                RETURNING
+                    cm.*,
+                    ir.status,
+                    ir.schema_version,
+                    ir.created_at,
+                    ir.updated_at
+                """,
+                (fidelity_json, cell_key),
+            )
+            row = cur.fetchone()
+
+        if row is None:
+            raise http_error(404, "cell_not_found", f"No cell with cell_key {cell_key}")
+
+        conn.commit()
+
+    meta = dict(row)
+    shaped = _flatten_meta(meta["cell_id"], meta, meta)
+    shaped["fidelity_coverage"] = body.model_dump()
+    return shaped
