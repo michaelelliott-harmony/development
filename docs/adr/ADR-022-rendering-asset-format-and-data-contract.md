@@ -1,8 +1,10 @@
 # ADR-022: Rendering Asset Format and Data Contract
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Date:** 2026-04-24
+
+**Acceptance Date:** 2026-04-24 (amended with Dr. Voss review corrections)
 
 **Deciders:** Marcus Webb, Dr. Mara Voss, Dr. Kofi Boateng
 
@@ -65,13 +67,13 @@ Every asset bundle carries the following schema:
   "fidelity_coverage": {
     "photorealistic": {
       "status": "enum (available | pending | splat_pending)",
-      "source_tier": "integer (0–4, source data quality tier)",
+      "source_tier": "integer or null (1–4 if status='available' or 'splat_pending'; nullable if status='pending')",
       "confidence": "number (0.0–1.0)",
       "timestamp": "ISO 8601 (moment of assessment)"
     },
     "schematic": {
       "status": "enum (available | pending | splat_pending)",
-      "source_tier": "integer (0–4)",
+      "source_tier": "integer or null (1–4 if status='available' or 'splat_pending'; nullable if status='pending')",
       "confidence": "number (0.0–1.0)",
       "timestamp": "ISO 8601"
     }
@@ -94,15 +96,44 @@ Every asset bundle carries the following schema:
 
 All fields are required except `geometry_source_url` (nullable to accommodate inferred or synthetic geometry).
 
+**Cardinality Constraint:** The `lod_chain` array **must contain at least one entry**. An empty array is semantically invalid; absence of the entire bundle is the correct signal for "no geometry". This ensures that every asset bundle present in the system has at least a LOD-0 (highest-detail) representation available.
+
+**Schema-Level Constraints:**
+
+The following CHECK constraints are mandatory on the `asset_bundles` table:
+
+```sql
+-- Tier 4 (synthetic/AI-generated) cannot be marked 'available' in photorealistic fidelity
+CHECK (
+    (fidelity_coverage->'photorealistic'->>'source_tier')::int != 4
+    OR (fidelity_coverage->'photorealistic'->>'status') != 'available'
+)
+
+-- Tier 4 (synthetic/AI-generated) cannot be marked 'available' in schematic fidelity
+CHECK (
+    (fidelity_coverage->'schematic'->>'source_tier')::int != 4
+    OR (fidelity_coverage->'schematic'->>'status') != 'available'
+)
+
+-- LOD chain must have at least one entry
+CHECK (
+    array_length(lod_chain, 1) >= 1
+)
+```
+
+**Rationale:** Tier 4 data is synthetic or AI-generated and must never be classified as "available" for rendering (Tier 4 can only be `pending` or `splat_pending`). This constraint preserves the hard boundary between measured/processed data (Tiers 1–3) and generated data (Tier 4), preventing accidental misrepresentation of synthetic geometry as measured geometry to end users.
+
 ### D3: Fidelity Coverage States and Semantics
 
 Three valid fidelity states are defined in the `fidelity_coverage.*.status` field:
 
 | State | Meaning | Interpretation |
 |---|---|---|
-| `available` | Geometry exists and is suitable for rendering at this fidelity level | The cell has either measured geometry (inferred=false) or a complete inferred representation (inferred=true, splat_pending=false) |
-| `pending` | Geometry is queued for acquisition or processing | A request for geometry has been filed but the result is not yet computed or stored |
-| `splat_pending` | Geometry is available in a degraded form pending upgrade via photogrammetry or measurement | The cell currently holds a splat (point cloud or mesh inferred from adjacent cells or satellite imagery) and is awaiting higher-fidelity measurement |
+| `available` | Geometry exists and is suitable for rendering at this fidelity level | The cell has either measured geometry (inferred=false) or a complete inferred representation (inferred=true, splat_pending=false). **Tier 4 cannot have this status.** |
+| `pending` | Geometry is queued for acquisition or processing | A request for geometry has been filed but the result is not yet computed or stored. `source_tier` is nullable in this state. |
+| `splat_pending` | Geometry is available in a degraded form pending upgrade via photogrammetry or measurement | The cell currently holds a splat (point cloud or mesh inferred from adjacent cells or satellite imagery) and is awaiting higher-fidelity measurement. **Tier 4 cannot have this status.** |
+
+**Tier Range:** Source tiers are 1–4 per ADR-018 (Tier 0 does not exist). Tier 4 (synthetic/AI-generated) is excluded from `available` and `splat_pending` states and may only occupy `pending` state.
 
 ### D4: Atomic Enforcement — geometry_inferred → splat_pending
 
@@ -121,7 +152,35 @@ CHECK (
 )
 ```
 
-**Rationale:** An inferred geometry (reconstructed from adjacent cells, satellite imagery, or AI upsampling) is not a direct measurement. It is a best-effort stand-in and must be marked as pending final photogrammetry or field survey. This constraint prevents misclassification of inferred geometry as "available" measured geometry, which would violate Tier semantics (Tier 3 = synthetic/inferred).
+**Rationale:** An inferred geometry (reconstructed from adjacent cells, satellite imagery, or AI upsampling) is not a direct measurement. It is a best-effort stand-in and must be marked as pending final photogrammetry or field survey. This constraint prevents misclassification of inferred geometry as "available" measured geometry, which would violate Tier semantics (Tier 4 = synthetic/AI-generated; Tier 1–3 = measured/processed).
+
+### D4b: Dual Source_Tier Semantics
+
+Every asset bundle carries **two independent `source_tier` fields** with distinct semantics:
+
+1. **Provenance `source_tier`** (record-level, per ADR-018): Tier of the original data source (Tier 1 = field survey, Tier 2 = published reference, Tier 3 = derived/computed, Tier 4 = synthetic/AI)
+2. **Fidelity `source_tier`** (per-fidelity-level, in `fidelity_coverage`): Tier of the data used to assess this specific fidelity level
+
+**Key invariant:** The fidelity-level `source_tier` **cannot be lower (more trustworthy) than the provenance `source_tier`**.
+
+Example:
+- A building has provenance Tier 1 (measured via LIDAR survey)
+- Its photorealistic fidelity is Tier 1 (from the LIDAR data)
+- Its schematic fidelity is Tier 3 (derived from the LIDAR via automated simplification)
+- This is valid: fidelity Tier 3 ≥ provenance Tier 1
+
+Counterexample (invalid):
+- A building has provenance Tier 2 (from published CAD)
+- Its photorealistic fidelity is Tier 1 (impossible — where did Tier 1 come from?)
+- This is invalid: fidelity Tier 1 < provenance Tier 2
+
+**Tier 4 Exclusion on Both Fields:**
+
+The Tier 4 exclusion (cannot be `available` in either fidelity state) applies to **both fields independently**:
+- If provenance `source_tier` = 4, no fidelity slot can be `available` (even if fidelity `source_tier` is lower, e.g., Tier 4 geometry + Tier 3 schematic texture is forbidden)
+- If a fidelity's `source_tier` = 4, that fidelity cannot be `available` (regardless of provenance tier)
+
+This ensures the hard boundary: no geometry carrying Tier 4 at any level can be presented to users as "finished" or "ready for rendering".
 
 ### D5: Gap Closure Status
 
