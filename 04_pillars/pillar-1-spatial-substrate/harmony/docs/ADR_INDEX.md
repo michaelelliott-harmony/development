@@ -1,3 +1,5 @@
+> ⚠️ **DEPRECATED — DO NOT USE.** This index covers only ADR-001–014 and is out of date. The canonical ADR index is at [`docs/adr/ADR_INDEX.md`](../../../../docs/adr/ADR_INDEX.md) (v2.0, covers ADR-001–022, next available: ADR-023).
+
 # Harmony ADR Index — Canonical Sequence
 
 > **Version:** 1.0
