@@ -9,7 +9,7 @@
 
 from typing import Any, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 
 # --- Regex patterns (kept in sync with the SQL schema and JSON schema) ----
@@ -86,6 +86,70 @@ class VolumetricCellCreate(BaseModel):
     @classmethod
     def _normalise_alias(cls, v: Optional[str]) -> Optional[str]:
         return v.upper() if v else v
+
+
+# -------------------------------------------------------------------------
+# Fidelity Coverage — PATCH /cells/{cell_key}/fidelity (Dr. Voss Option B)
+# -------------------------------------------------------------------------
+
+class StructuralFidelity(BaseModel):
+    """Structural fidelity slot for a cell record."""
+    model_config = ConfigDict(extra="forbid")
+
+    status: str = Field(..., description="available | pending | unavailable")
+    source: Optional[str] = None
+    captured_at: Optional[str] = None
+    source_tier: Optional[int] = Field(None, ge=1, le=4)
+
+    @model_validator(mode="after")
+    def _validate_constraints(self) -> "StructuralFidelity":
+        if self.status not in ("available", "pending", "unavailable"):
+            raise ValueError(
+                f"structural.status must be one of: available, pending, unavailable. Got: {self.status!r}"
+            )
+        if self.status == "available" and self.source is None:
+            raise ValueError("structural.source must not be null when status is 'available'")
+        if self.source_tier == 4 and self.status == "available":
+            raise ValueError(
+                "Tier 4 source cannot have status 'available' (ADR-022 §D3)"
+            )
+        return self
+
+
+class PhotorealisticFidelity(BaseModel):
+    """Photorealistic fidelity slot for a cell record."""
+    model_config = ConfigDict(extra="forbid")
+
+    status: str = Field(..., description="available | pending | splat_pending | unavailable")
+    source: Optional[str] = None
+    captured_at: Optional[str] = None
+    source_tier: Optional[int] = Field(None, ge=1, le=4)
+
+    @model_validator(mode="after")
+    def _validate_constraints(self) -> "PhotorealisticFidelity":
+        if self.status not in ("available", "pending", "splat_pending", "unavailable"):
+            raise ValueError(
+                f"photorealistic.status must be one of: available, pending, splat_pending, unavailable. Got: {self.status!r}"
+            )
+        if self.status == "available" and self.source is None:
+            raise ValueError("photorealistic.source must not be null when status is 'available'")
+        if self.source_tier == 4 and self.status == "available":
+            raise ValueError(
+                "Tier 4 source cannot have status 'available' (ADR-022 §D3)"
+            )
+        return self
+
+
+class FidelityCoverageUpdate(BaseModel):
+    """Request body for PATCH /cells/{cell_key}/fidelity.
+
+    Full replacement semantics — the entire fidelity_coverage JSONB field is
+    overwritten with the body. Both structural and photorealistic are required.
+    """
+    model_config = ConfigDict(extra="forbid")
+
+    structural: StructuralFidelity
+    photorealistic: PhotorealisticFidelity
 
 
 class CentroidECEF(BaseModel):

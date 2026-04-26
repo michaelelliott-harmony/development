@@ -28,15 +28,15 @@ This is the team's shared memory and current project state.
 Active Pillar: 2 — Data Ingestion Pipeline
 Active Sprint: Sprint 1 — Adapters + Validation (M1, M2)
 Schema Version: v0.2.0
-Tests Passing: 172 (Pillar 1 complete)
-ADRs Locked: 18 (next available ADR-019)
-Last Update: 23 Apr 2026
+Tests Passing: 181 (Pillar 1 complete — 172 original + 9 fidelity endpoint tests)
+ADRs Locked: 18 (next available ADR-023)
+Last Update: 26 Apr 2026
 
 ## Pillar Status
 
 | Pillar | Name | Status |
 |---|---|---|
-| 1 | Spatial Substrate | COMPLETE — Stage 1 and Stage 2 done |
+| 1 | Spatial Substrate | COMPLETE — Stage 1, Stage 2, and fidelity API extension done |
 | 2 | Data Ingestion Pipeline | ACTIVE — Sprint 1 in progress |
 | 3 | Rendering Interface | PREP — framework research in progress |
 | 4 | Spatial Knowledge Layer | PENDING |
