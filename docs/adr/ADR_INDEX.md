@@ -18,13 +18,13 @@
 | ADR-004 | `cell_id` vs `cell_key` Dual-Identifier Principle | Accepted | `ADR-004-cell-id-vs-cell-key.md` — authoritative copy in nested source tree |
 | ADR-005 | Cell Adjacency Model | Stub — To be extracted | `ADR-005-cell-adjacency-model.md` |
 | ADR-006 | Alias Namespace Model | Accepted | `ADR-006-alias-namespace-model.md` — authoritative copy in nested source tree |
-| ADR-007 | Temporal Versioning | Accepted | `ADR-007-temporal-versioning.md` — authoritative copy in nested source tree |
+| ADR-007 | Temporal Versioning Model | Accepted | `ADR-007-temporal-versioning.md` — authoritative copy in nested source tree |
 | ADR-008 | Named-Entity Resolution Boundary | Accepted | `ADR-008-named-entity-resolution-boundary.md` — authoritative copy in nested source tree |
 | ADR-009 | Three-Layer Agent Model | Accepted | `ADR-009-three-layer-agent-model.md` — authoritative copy in nested source tree |
 | ADR-010 | Spatial Geometry Schema Extension (v0.1.3) | Accepted | `ADR-010-spatial-geometry-schema-extension.md` — authoritative copy in nested source tree |
 | ADR-011 | Gate 3 Closure — Identity Generation Order | Accepted | `ADR-011-gate-3-closure-identity-generation-order.md` — authoritative copy in nested source tree |
 | ADR-012 | Alias Generation Architecture | Accepted | `ADR-012-alias-generation-architecture.md` — authoritative copy in nested source tree |
-| ADR-013 | API Layer Architecture (FastAPI) | Accepted | `ADR-013-api-layer-architecture.md` — authoritative copy in nested source tree |
+| ADR-013 | API Layer Architecture | Accepted | `ADR-013-api-layer-architecture.md` — authoritative copy in nested source tree |
 | ADR-014 | Pillar 1 Stage 1 Completion | Accepted | `ADR-014-pillar-1-stage-1-completion.md` — authoritative copy in nested source tree |
 | ADR-015 | Adaptive Volumetric Cell Extension | Accepted | `ADR-015-adaptive-volumetric-cell-extension.md` (populated 2026-04-20 by p1-stage2 dispatch) |
 | ADR-016 | Temporal Trigger Architecture — Permit Feed Integration | Accepted | `ADR-016-temporal-trigger-architecture.md` (renumbered from ADR-015 during reorganisation) |
