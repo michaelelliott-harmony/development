@@ -74,6 +74,7 @@ def up(conn) -> None:
         # ------------------------------------------------------------------
         cur.execute("""
             DROP TRIGGER IF EXISTS trg_bitemporal_reserved_write
+            ON cell_metadata
         """)
 
         # Ensure valid_from column exists and is writable
@@ -128,6 +129,16 @@ def up(conn) -> None:
               AND schema_version = %s
         """, (SCHEMA_VERSION_AFTER, SCHEMA_VERSION_BEFORE))
 
+        # ------------------------------------------------------------------
+        # 9. Record migration application in _schema_metadata
+        # ------------------------------------------------------------------
+        cur.execute("""
+            INSERT INTO _schema_metadata (key, value) VALUES
+                ('migration_m7_applied_at', NOW()::text),
+                ('schema_version', %s)
+            ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value
+        """, (SCHEMA_VERSION_AFTER,))
+
     conn.commit()
 
 
@@ -156,6 +167,15 @@ def down(conn) -> None:
             WHERE object_type = 'cell'
               AND schema_version = %s
         """, (SCHEMA_VERSION_BEFORE, SCHEMA_VERSION_AFTER))
+
+        # Revert _schema_metadata
+        cur.execute(
+            "DELETE FROM _schema_metadata WHERE key = 'migration_m7_applied_at'"
+        )
+        cur.execute(
+            "UPDATE _schema_metadata SET value = %s WHERE key = 'schema_version'",
+            (SCHEMA_VERSION_BEFORE,),
+        )
 
         # Note: valid_from, valid_to, version_of, temporal_status columns are
         # NOT removed in the down() migration — removing them would lose data.
