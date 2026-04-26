@@ -34,6 +34,7 @@
 | ADR-020 | CRS Normalisation Strategy | Proposed | `ADR-020-crs-normalisation-strategy.md` |
 | ADR-021 | Geometry Quarantine Lifecycle | Proposed | `ADR-021-geometry-quarantine-lifecycle.md` |
 | ADR-022 | Rendering Asset Format and Data Contract | Accepted | `ADR-022-rendering-asset-format-and-data-contract.md` |
+| ADR-023 | Harmonic Cell Field Descriptor Schema Reservation | Proposed | `ADR-023-harmonic-cell-field-descriptor-schema-reservation.md` |
 
 ---
 
@@ -53,7 +54,7 @@ ADR-016 currently here.
 
 ## Next Available Number
 
-ADR-023.
+ADR-024.
 
 > Note: ADR-017 was allocated to the Stage 2 implementation ADR even though
 > the Stage 2 dispatch brief (`docs/dispatch/dispatch-p1-stage2-20260420/`)
