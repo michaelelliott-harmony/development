@@ -1,5 +1,5 @@
 {
-    "_fixture_note": "Structured test fixture based on documented NSW ePlanning API field schema (dispatch briefing, April 24 2026). Network access to api.apps1.nsw.gov.au is blocked from this environment by outbound proxy policy — the domain must be added to the allowed hosts list before AC1 (live connectivity) can be validated. Field names and format match the confirmed API contract from Denniss Reddy, DPHI.",
+    "_fixture_note": "Structured test fixture based on documented NSW ePlanning API field schema (dispatch briefing, April 24 2026). Network access to api.apps1.nsw.gov.au confirmed reachable from this environment (2026-04-27, Sprint 3 session). The environment DNS resolver has transient 'DNS cache overflow' failures on first attempt; retries succeed. Field names and format match the confirmed API contract from Denniss Reddy, DPHI.",
     "_council": "Central Coast Council",
     "_lga": "Former Gosford and Wyong LGAs",
 
