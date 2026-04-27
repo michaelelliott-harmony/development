@@ -17,6 +17,8 @@
 | External API connections | Elena then Mikey | Elena approves; Mikey gates execution | Always |
 | Test pass/fail | QA Agent | Yes | Regressions in production tests |
 | Code review approval | Reviewer | Yes — non-destructive changes | Destructive operations always |
+| Rendering architecture (Pillar 3) | Dr. Lin Park | Yes | Strategic positioning conflicts, capital decisions exceeding agreed thresholds, partnership terms that affect cell primitive integrity |
+| Live Substrate Service architecture | Dr. Lin Park | Yes | Same as above |
 
 ---
 
@@ -33,6 +35,12 @@ When an agent encounters a question, route to:
 | Scope ambiguity | Marcus Webb → Dr. Voss if unresolvable |
 | Irreversible action | Marcus Webb → Telegram to Mikey |
 | North Star conflict | Dr. Voss → Telegram to Mikey |
+| Rendering pipeline architecture | Dr. Lin Park |
+| Mobile delivery / latency / GPU concerns | Dr. Lin Park |
+| Live Substrate Service questions | Dr. Lin Park |
+| Cell Presence implementation questions | Dr. Lin Park |
+| Live region protocol or feed binding questions | Dr. Lin Park |
+| Cesium partnership architectural compatibility | Dr. Lin Park (consulted by Boateng on terms) |
 
 ---
 
