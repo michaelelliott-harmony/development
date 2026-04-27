@@ -24,26 +24,76 @@ Before HCI Phase 1 technology conditions are met and validated, the schema must 
 
 ### 2.1 Reserved Field Definition
 
-A new JSONB column `field_descriptors` shall be added to both cell and entity records:
+A new JSONB column `field_descriptors` shall be added to `cell_metadata` records only:
 
 - **Type:** JSONB
 - **Nullable:** Yes (DEFAULT NULL)
 - **Initial state:** Empty (all records default to NULL)
-- **No CHECK constraints:** Validation rules are deferred to the activation ADR
+- **Schema enforcement:** Application-layer validation only (see Section 2.2); database enforces valid JSON only
 
-### 2.2 Typed Container Structure
+### 2.2 JSON Schema Contract
 
-The `field_descriptors` column holds a JSON array of field descriptor objects. Each object is indexed by:
+The `field_descriptors` column holds a JSON array of field descriptor objects. This ADR defines a typed contract (enforced at the application layer, not the database) that governs the structure:
 
-- **`field_type`** — string, identifying the category of physical field. Initial set: `visual_radiance`, `acoustic`, `thermal`, `electromagnetic`. Additional values must be supported without schema migration (forward-compatibility requirement — see Section 2.5).
-- **`harmonic_order`** — integer, representing the order of the spherical harmonic or field expansion term.
-- **`temporal_index`** — timestamp or integer sequence, enabling time-varying field measurements.
+```json
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["field_type", "harmonic_order", "temporal_index"],
+    "properties": {
+      "field_type": {
+        "type": "string",
+        "description": "Physical field category. Initial set: visual_radiance, acoustic, thermal, electromagnetic. Additional values permitted without schema migration.",
+        "enum_documentation": [
+          "visual_radiance — spherical harmonic decomposition of light field intensity and chrominance",
+          "acoustic — spherical harmonic decomposition of sound pressure levels and frequency distribution",
+          "thermal — scalar or low-order harmonic decomposition of temperature distribution",
+          "electromagnetic — spherical harmonic decomposition of RF field strength and polarisation"
+        ]
+      },
+      "harmonic_order": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "Order of the spherical harmonic expansion. 0 = omnidirectional (scalar), 1 = first-order (dipole), 2+ = higher-order directional resolution. Maximum useful order is sensor-dependent and defined in the activation ADR."
+      },
+      "temporal_index": {
+        "oneOf": [
+          {"type": "string", "format": "date-time"},
+          {"type": "integer", "minimum": 0}
+        ],
+        "description": "Time reference for this measurement. ISO 8601 timestamp for absolute time, or integer sequence index for relative ordering within a measurement series."
+      },
+      "coefficients": {
+        "type": "array",
+        "items": {"type": "number"},
+        "description": "Spherical harmonic coefficients for this field_type at this order. Array length = (2 * harmonic_order + 1). Coefficient ordering convention defined in the activation ADR."
+      },
+      "source": {
+        "type": "string",
+        "description": "Identifier of the sensor, model, or process that produced this measurement."
+      },
+      "confidence": {
+        "type": "number",
+        "minimum": 0.0,
+        "maximum": 1.0,
+        "description": "Confidence score for this measurement. 1.0 = direct sensor measurement, lower values for modelled or inferred data."
+      }
+    },
+    "additionalProperties": true
+  }
+}
+```
 
-Additional keys within each descriptor object (e.g., `coefficients`, `source`, `confidence`, `basis_function`, `spatial_resolution`) are schema-flexible by nature of JSONB and do not require schema changes.
+**Composite key:** Within a cell's `field_descriptors`, the tuple `(field_type, harmonic_order, temporal_index)` uniquely identifies a measurement. Together they specify:
+- **field_type:** WHAT physical property is described
+- **harmonic_order:** At what RESOLUTION the decomposition is made
+- **temporal_index:** WHEN the measurement was taken
 
 ### 2.3 Example Structure
 
-This example is for documentation only and is not enforced by the schema:
+This example is for documentation only and instantiates the JSON Schema:
 
 ```json
 {
@@ -68,31 +118,37 @@ This example is for documentation only and is not enforced by the schema:
 }
 ```
 
-### 2.4 Activation Conditions (Documented, Not Enforced)
+### 2.4 Scope: Cell Metadata Only
+
+The `field_descriptors` reservation is scoped to `cell_metadata` records exclusively. Field descriptors describe the physical state of a bounded spatial region (a cell), not the properties of named objects (entities).
+
+Justification: The spherical harmonic decomposition represents the ambient physical field within a cell's spatial bounds. This is an intrinsic property of the cell itself, not an attribute of entities that may occupy the cell.
+
+### 2.5 Activation Conditions (Documented, Not Enforced)
 
 This ADR reserves the schema space only. The column exists, defaults to NULL, and contains no data. Activation is deferred to a future ADR (ADR-024 or later) that will define:
 
 - **Data sources:** Which systems populate field descriptors and under what conditions
-- **Validation rules:** What values are permitted in `coefficients`, `basis_function`, and other keys
+- **Validation rules:** Application-layer enforcement of the JSON Schema contract (Section 2.2)
 - **Write permissions:** Which agents or services have authorization to write to `field_descriptors`
 - **Consumer contracts:** Who reads field descriptors, how frequently, and what guarantees they require
 - **Temporal semantics:** How time-varying measurements are recorded and queried
 
 Until the activation ADR is accepted, no data shall be written to `field_descriptors`.
 
-### 2.5 Forward-Compatibility Requirement
+### 2.6 Forward-Compatibility Requirement
 
 The schema must support additional `field_type` values beyond the four initial types without requiring a schema migration:
 
 - **Type constraint:** Use a string type for `field_type`, NOT a database enum. String types are schema-flexible; enums require a migration to add new values.
-- **No CHECK constraints on `field_type`:** Validation of allowed types is an application-layer concern, defined in the activation ADR. The database enforces only that the column contains valid JSON.
-- **JSONB schema flexibility:** New keys within descriptor objects (e.g., `coefficients`, `basis_function`, `spatial_resolution`) do not require schema changes. JSONB columns are schema-agnostic by design.
+- **No CHECK constraints on `field_type`:** The JSON Schema (Section 2.2) documents the initial set but does not enforce it via database constraints. Validation of allowed types is an application-layer concern, defined in the activation ADR. The database enforces only that the column contains valid JSON.
+- **JSONB schema flexibility:** New keys within descriptor objects (e.g., `basis_function`, `spatial_resolution`, application-specific fields) do not require schema changes. JSONB columns are schema-agnostic by design. The JSON Schema is defined now; application code enforces it.
 
-**Example:** Adding support for `chemical` field type requires no schema migration — the application simply begins writing objects with `"field_type": "chemical"` in the same `field_descriptors` array.
+**Example:** Adding support for `chemical` field type requires no schema migration — the application activation ADR will update validation rules, and the application simply begins writing objects with `"field_type": "chemical"` in the same `field_descriptors` array.
 
-### 2.6 No Data Validation at Schema Layer
+### 2.7 Database-Layer Constraints (Minimal)
 
-This is a reservation, not an enforcement. The database-level constraint is that `field_descriptors` is either NULL (no data) or valid JSON. No CHECK constraints on field content, no type validation for keys, no range checks on `harmonic_order`. All validation rules are deferred to the activation ADR and enforced at the application layer.
+This is a reservation, not an enforcement. The database-level constraint is that `field_descriptors` is either NULL (no data) or valid JSON. No CHECK constraints on field content, no type validation for keys, no range checks on `harmonic_order`. All structured validation rules are defined in the JSON Schema (Section 2.2) and enforced at the application layer, which provides flexibility as HCI Phase 1 technology evolves.
 
 ---
 
@@ -116,8 +172,8 @@ This is a reservation, not an enforcement. The database-level constraint is that
 
 ### Cost Trade-Offs
 
-- **Small cost:** Adding a JSONB column to cells and entities. On small or empty tables, this is negligible. On production tables with millions of rows, this is an offline ALTER TABLE operation (~few seconds per million rows, depending on storage backend). This cost is paid once at deployment; the benefit is avoiding a more expensive migration later.
-- **Application-layer validation:** Data validation for field descriptors must be implemented at the application layer, not the database layer. This is acceptable because validation rules will change as HCI Phase 1 technology evolves. Application-layer validation provides flexibility that database constraints do not.
+- **Small cost:** Adding a JSONB column to cell_metadata. On small or empty tables, this is negligible. On production tables with millions of rows, this is an offline ALTER TABLE operation (~few seconds per million rows, depending on storage backend). This cost is paid once at deployment; the benefit is avoiding a more expensive migration later.
+- **Application-layer validation:** Data validation for field descriptors must be implemented at the application layer, enforcing the JSON Schema (Section 2.2). This is acceptable because validation rules will change as HCI Phase 1 technology evolves. Application-layer validation provides flexibility that database constraints do not.
 
 ---
 
@@ -141,15 +197,22 @@ Define `field_type` as a PostgreSQL ENUM type instead of a string.
 
 **Rejected:** Adding new enum values requires an ALTER TYPE statement, which is a schema migration (albeit faster than a full table migration). A string field with application-layer validation is more flexible and aligns with the forward-compatibility requirement. Enums are optimized for fixed, rarely-changing categories; field types may evolve as HCI matures.
 
+### Alternative D: Entity-Level Field Descriptors
+
+Reserve `field_descriptors` on entity records in addition to cell_metadata.
+
+**Rejected (unless new justification provided):** Field descriptors as defined in this ADR describe the ambient physical state of a bounded spatial region (a cell). They are not attributes of named objects (entities). If entity-level acoustic or thermal signatures are required — e.g., per-building noise profiles distinct from ambient cell acoustics, or per-vehicle thermal emissions — a separate ADR should be drafted with architectural justification from Dr. Kofi Boateng (Knowledge Layer). This reservation does not foreclose that option; a future ADR can define entity-level field descriptors independently.
+
 ---
 
 ## 5. Implementation Constraints
 
 1. **ADR-023 must be accepted before any schema changes are written.** This is a hard gate.
 2. **The schema migration requires Dr. Voss's approval before execution.** Flag as `requires_approval: true` in session output.
-3. **The column is added as NULL DEFAULT.** No data is written until the activation ADR is accepted.
-4. **JSONB columns require the `jsonb` type in PostgreSQL.** If using a different database backend, the equivalent schemaless type is acceptable (e.g., JSON in MySQL 5.7+, or a document type in document databases).
-5. **Application code must not attempt to write to `field_descriptors` before the activation ADR is accepted.** Enforce this via code review and, ideally, a database trigger that rejects writes outside of the activation window.
+3. **The column is added to `cell_metadata` as NULL DEFAULT.** No data is written until the activation ADR is accepted.
+4. **JSON Schema enforcement is application-layer responsibility.** The JSON Schema (Section 2.2) is the contract; application code enforces it. The database ensures only that the column contains valid JSON.
+5. **JSONB columns require the `jsonb` type in PostgreSQL.** If using a different database backend, the equivalent schemaless type is acceptable (e.g., JSON in MySQL 5.7+, or a document type in document databases).
+6. **Application code must not attempt to write to `field_descriptors` before the activation ADR is accepted.** Enforce this via code review and, ideally, a database trigger that rejects writes outside of the activation window.
 
 ---
 
