@@ -136,7 +136,7 @@ This ADR reserves the schema space only. The column exists, defaults to NULL, an
 
 Until the activation ADR is accepted, no data shall be written to `field_descriptors`.
 
-**Gap 7 Anchor:** Activation is contingent on closure of Gap 7 (Harmonic Cell Field Sensing Architecture) in the Harmony Gap Register. Gap 7 was proposed by Dr. Kofi Boateng in the HCI programme (formally deferred) and should be added to the gap register in the next master specification revision (V1.1 or V2.0). The activation ADR must reference Gap 7 closure as a prerequisite, providing a formal architectural anchor rather than a dependency on external technology milestones the project does not control.
+**Gap 8 Anchor:** Activation is contingent on closure of Gap 8 (Harmonic Cell Field Sensing Architecture) in the Harmony Gap Register. Gap 8 was proposed by Dr. Kofi Boateng in the HCI programme (formally deferred) and should be added to the gap register in the next master specification revision (V1.1 or V2.0). The activation ADR must reference Gap 8 closure as a prerequisite, providing a formal architectural anchor rather than a dependency on external technology milestones the project does not control.
 
 ### 2.6 Forward-Compatibility Requirement
 
@@ -186,7 +186,7 @@ This is a reservation, not an enforcement. The database-level constraint is that
 
 **V4: Is the reserved field_descriptors field architecturally compatible with the existing cell schema?**
 
-**Answer:** Yes, in principle. A nullable JSONB column with DEFAULT NULL on cell_metadata does not conflict with schema v0.2.0 (current: v0.3.0 post-temporal migration). It does not interfere with the Pillar 1 identity model, the volumetric cell extension, the bitemporal reservation, or any Pillar 2 ingestion path.
+**Answer:** Yes, in principle. A nullable JSONB column with DEFAULT NULL on cell_metadata does not conflict with schema v0.2.0. It does not interfere with the Pillar 1 identity model, the volumetric cell extension, the bitemporal reservation, or any Pillar 2 ingestion path.
 
 The reservation is architecturally compatible — provided:
 
