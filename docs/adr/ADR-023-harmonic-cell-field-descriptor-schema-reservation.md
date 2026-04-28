@@ -136,6 +136,8 @@ This ADR reserves the schema space only. The column exists, defaults to NULL, an
 
 Until the activation ADR is accepted, no data shall be written to `field_descriptors`.
 
+**Gap 7 Anchor:** Activation is contingent on closure of Gap 7 (Harmonic Cell Field Sensing Architecture) in the Harmony Gap Register. Gap 7 was proposed by Dr. Kofi Boateng in the HCI programme (formally deferred) and should be added to the gap register in the next master specification revision (V1.1 or V2.0). The activation ADR must reference Gap 7 closure as a prerequisite, providing a formal architectural anchor rather than a dependency on external technology milestones the project does not control.
+
 ### 2.6 Forward-Compatibility Requirement
 
 The schema must support additional `field_type` values beyond the four initial types without requiring a schema migration:
@@ -174,6 +176,26 @@ This is a reservation, not an enforcement. The database-level constraint is that
 
 - **Small cost:** Adding a JSONB column to cell_metadata. On small or empty tables, this is negligible. On production tables with millions of rows, this is an offline ALTER TABLE operation (~few seconds per million rows, depending on storage backend). This cost is paid once at deployment; the benefit is avoiding a more expensive migration later.
 - **Application-layer validation:** Data validation for field descriptors must be implemented at the application layer, enforcing the JSON Schema (Section 2.2). This is acceptable because validation rules will change as HCI Phase 1 technology evolves. Application-layer validation provides flexibility that database constraints do not.
+
+---
+
+## 3.1 Architectural Compatibility Validation (V4)
+
+**Validated by:** Dr. Mara Voss, Principal Architect  
+**Date:** April 27, 2026
+
+**V4: Is the reserved field_descriptors field architecturally compatible with the existing cell schema?**
+
+**Answer:** Yes, in principle. A nullable JSONB column with DEFAULT NULL on cell_metadata does not conflict with schema v0.2.0 (current: v0.3.0 post-temporal migration). It does not interfere with the Pillar 1 identity model, the volumetric cell extension, the bitemporal reservation, or any Pillar 2 ingestion path.
+
+The reservation is architecturally compatible — provided:
+
+1. The container carries a defined JSON Schema contract (addressed in Section 2.2)
+2. The scope is limited to cell_metadata only unless entity-level justification is provided and documented (addressed in Section 2.4)
+
+This validation is conditional on the ADR being properly drafted with these two provisions met. Both are now addressed in this revision.
+
+**Note:** Dr. Voss's V4 answer should be logged as a DEC entry in the Decision Log by Marcus Webb once the ADR is accepted. It is conditional on acceptance — do not log before then.
 
 ---
 
