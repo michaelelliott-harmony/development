@@ -20,6 +20,7 @@ This is the team's shared memory and current project state.
 | Reviewer | Shane Rutherford | Haiku 4.5 | agent_011CaLLkoto8Q8BoZctvVRag |
 | File Systems Architect | Priya Kapoor | Sonnet 4.6 | agent_011CaMszdCcbx12ZACwxeDX2 |
 | Chief Geospatial Officer | Dr. Kofi Boateng | Opus 4.6 | agent_011CaMt4qhZCcUUWdJC9euGZ |
+| Chief Rendering Architect | Dr. Lin Park | Opus 4.6 | agent_011CaUFF1NxkSV9sDSkKnaVj |
 
 ---
 

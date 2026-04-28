@@ -287,6 +287,21 @@ exclusion), ADR-013 (API Layer Architecture). No new ADR required.
 
 ---
 
+### DEC-018 | 2026-04-27 | Team Structure / Pillar 3
+**Decision:** Activate Chief Rendering Architect role; assign
+Dr. Lin Park persona as binding authority on Pillar 3 (Rendering
+Interface) and the Live Substrate Service.
+**Impact:** Adds a fourth named architectural authority to the
+project (peer to Voss, Boateng, Webb). Authority Matrix updated.
+Live Substrate Service now has a named owner. Cesium partnership
+track (WS-A) gains a binding rendering authority for architectural
+compatibility review.
+**ADR:** N/A — team structure decision, not architecture decision
+**Status:** Accepted
+**Spec version:** Pending V1.2.0
+
+---
+
 ## Unprocessed Content
 
 A set of variation files existed under `Master_Spec_Variations/variations/pending/`

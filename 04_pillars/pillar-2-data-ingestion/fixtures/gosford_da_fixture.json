@@ -1,0 +1,90 @@
+{
+    "_fixture_note": "Structured test fixture based on documented NSW ePlanning API field schema (dispatch briefing, April 24 2026). Network access to api.apps1.nsw.gov.au is blocked from this environment by outbound proxy policy — the domain must be added to the allowed hosts list before AC1 (live connectivity) can be validated. Field names and format match the confirmed API contract from Denniss Reddy, DPHI.",
+    "_council": "Central Coast Council",
+    "_lga": "Former Gosford and Wyong LGAs",
+
+    "da_records": [
+        {
+            "PlanningPortalApplicationNumber": "DA/2026/0142",
+            "ApplicationType": "Development Application",
+            "ApplicationStatus": "Under Assessment",
+            "FullAddress": "88 Mann Street, Gosford NSW 2250",
+            "LotNumber": "1",
+            "PlanLabel": "DP787786",
+            "LodgementDate": "2026-02-14",
+            "DeterminationDate": null,
+            "_fixture_description": "Residential development application — Mann Street Gosford (reference site for Gosford Observation)"
+        },
+        {
+            "PlanningPortalApplicationNumber": "DA/2026/0089",
+            "ApplicationType": "Development Application",
+            "ApplicationStatus": "Determined",
+            "FullAddress": "12 Terrigal Drive, Terrigal NSW 2260",
+            "LotNumber": "42",
+            "PlanLabel": "DP1234567",
+            "LodgementDate": "2025-11-03",
+            "DeterminationDate": "2026-01-18"
+        },
+        {
+            "PlanningPortalApplicationNumber": "DA/2026/0211",
+            "ApplicationType": "Development Application",
+            "ApplicationStatus": "Withdrawn",
+            "FullAddress": "5 Central Coast Highway, Gosford NSW 2250",
+            "LotNumber": "7",
+            "PlanLabel": "DP456789",
+            "LodgementDate": "2026-03-01",
+            "DeterminationDate": null
+        }
+    ],
+
+    "cc_records": [
+        {
+            "PlanningPortalApplicationNumber": "CC/2026/0055",
+            "ApplicationStatus": "Issued",
+            "X": 151.3411,
+            "Y": -33.4234,
+            "Lot": "1",
+            "PlanLabel": "DP787786",
+            "StreetNumber1": "88",
+            "StreetName": "Mann Street",
+            "Suburb": "Gosford",
+            "Postcode": "2250",
+            "DeterminationDate": "2026-03-10",
+            "_fixture_description": "Construction Certificate for Mann Street DA — triggers change_in_progress"
+        }
+    ],
+
+    "oc_records": [
+        {
+            "PlanningPortalApplicationNumber": "OC/2025/0312",
+            "ApplicationStatus": "Issued",
+            "X": 151.3248,
+            "Y": -33.4356,
+            "Lot": "42",
+            "PlanLabel": "DP1234567",
+            "StreetNumber1": "12",
+            "StreetName": "Terrigal Drive",
+            "Suburb": "Terrigal",
+            "Postcode": "2260",
+            "DeterminationDate": "2026-01-22",
+            "_fixture_description": "Occupation Certificate — DeterminationDate becomes valid_from on cell (ADR-016 §2.4)"
+        }
+    ],
+
+    "cdc_records": [
+        {
+            "PlanningPortalApplicationNumber": "CDC/2026/0033",
+            "ApplicationStatus": "Issued",
+            "X": 151.3500,
+            "Y": -33.4100,
+            "Lot": "15",
+            "PlanLabel": "SP99887",
+            "StreetNumber1": "200",
+            "StreetName": "Ocean View Drive",
+            "Suburb": "Wamberal",
+            "Postcode": "2260",
+            "DeterminationDate": "2026-02-28",
+            "_fixture_description": "Complying Development Certificate — treated as CC_ISSUED event"
+        }
+    ]
+}
