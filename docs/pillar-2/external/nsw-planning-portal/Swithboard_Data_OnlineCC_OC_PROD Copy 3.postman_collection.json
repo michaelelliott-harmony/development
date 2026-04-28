@@ -1,0 +1,97 @@
+{
+	"info": {
+		"_postman_id": "8a1203eb-521a-4305-b11a-186a96593620",
+		"name": "Swithboard_Data_PCC_PROD Copy 3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "OnlineCC",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "PageSize",
+						"value": "5",
+						"type": "text"
+					},
+					{
+						"key": "PageNumber",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "filters",
+						"value": "{ \"filters\": {  } }",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api.apps1.nsw.gov.au/eplanning/data/v0/OnlineCC",
+					"protocol": "https",
+					"host": [
+						"api",
+						"apps1",
+						"nsw",
+						"gov",
+						"au"
+					],
+					"path": [
+						"eplanning",
+						"data",
+						"v0",
+						"OnlineCC"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OC",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "PageSize",
+						"value": "5",
+						"type": "text"
+					},
+					{
+						"key": "PageNumber",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "filters",
+						"value": "{ \"filters\": {  } }",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api.apps1.nsw.gov.au/eplanning/data/v0/OC",
+					"protocol": "https",
+					"host": [
+						"api",
+						"apps1",
+						"nsw",
+						"gov",
+						"au"
+					],
+					"path": [
+						"eplanning",
+						"data",
+						"v0",
+						"OC"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
