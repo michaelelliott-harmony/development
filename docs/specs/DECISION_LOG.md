@@ -302,6 +302,34 @@ compatibility review.
 
 ---
 
+### DEC-019 | 2026-04-28 | Pillar 1 — API Extension
+
+**Decision:** Added `PATCH /cells/{cell_key}/status` endpoint to the Pillar 1
+API. Purpose-built, narrow endpoint with full-replacement semantics on
+`cell_metadata.cell_status`. Dr. Voss Option B — not a general metadata PATCH.
+Validation enforced at the API layer: `cell_status` restricted to four values
+defined by the ADR-016 §2.3 state machine (`stable`, `change_expected`,
+`change_in_progress`, `change_confirmed`); extra fields forbidden (`extra="forbid"`);
+invalid values return 422. Idempotent — same value applied twice produces the
+same result. The `cell_status` column is introduced by the M7 migration
+(`m7_temporal_field_activation.py`, schema v0.2.0→v0.3.0), which is produced but
+requires Mikey's approval gate before execution in production.
+
+**Impact:** Pillar 2 temporal trigger transition service can now update
+`cell_status` on individual cells via the Pillar 1 API contract, driving the
+ADR-016 §2.3 state machine. The endpoint is live once M7 migration is executed.
+No schema change is introduced by this endpoint itself — it writes to a column
+added by the already-produced M7 migration.
+
+**ADR:** ADR-016 §2.3 (state machine values), ADR-013 (API layer architecture).
+No new ADR required — covered by existing decisions.
+
+**Status:** Accepted
+
+**Spec version:** Pending V1.2.0
+
+---
+
 ## Unprocessed Content
 
 A set of variation files existed under `Master_Spec_Variations/variations/pending/`

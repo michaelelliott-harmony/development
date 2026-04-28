@@ -22,6 +22,7 @@ from harmony.services.api.models import (
     CellAdjacencyResponse,
     VerticalAdjacency,
     FidelityCoverageUpdate,
+    CellStatusUpdate,
 )
 
 router = APIRouter(tags=["cells"])
@@ -424,4 +425,59 @@ def update_cell_fidelity(cell_key: str, body: FidelityCoverageUpdate):
     meta = dict(row)
     shaped = _flatten_meta(meta["cell_id"], meta, meta)
     shaped["fidelity_coverage"] = body.model_dump()
+    return shaped
+
+
+# -------------------------------------------------------------------------
+# Cell status update — PATCH /cells/{cell_key}/status
+# DEC-019 / ADR-016 §2.3. Full replacement on cell_metadata.cell_status.
+# Requires M7 migration applied (schema v0.3.0). Pillar 2 temporal trigger
+# transition service is the primary consumer.
+# -------------------------------------------------------------------------
+
+@router.patch(
+    "/cells/{cell_key}/status",
+    response_model=CellResponse,
+    responses={
+        200: {"description": "Cell status updated — full replacement applied"},
+        404: {"description": "Cell not found"},
+        422: {"description": "Validation failed"},
+    },
+    summary="Update cell status for a cell (full replacement)",
+)
+def update_cell_status(cell_key: str, body: CellStatusUpdate):
+    """Replace the cell_status field on the cell identified by cell_key.
+
+    Valid values: stable, change_expected, change_in_progress, change_confirmed
+    (ADR-016 §2.3 state machine). Full replacement — calling with the same
+    value twice produces the same result (idempotent by construction).
+    """
+    with get_connection() as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
+            cur.execute(
+                """
+                UPDATE cell_metadata cm
+                SET    cell_status = %s
+                FROM   identity_registry ir
+                WHERE  ir.canonical_id = cm.cell_id
+                  AND  cm.cell_key     = %s
+                RETURNING
+                    cm.*,
+                    ir.status,
+                    ir.schema_version,
+                    ir.created_at,
+                    ir.updated_at
+                """,
+                (body.cell_status, cell_key),
+            )
+            row = cur.fetchone()
+
+        if row is None:
+            raise http_error(404, "cell_not_found", f"No cell with cell_key {cell_key}")
+
+        conn.commit()
+
+    meta = dict(row)
+    shaped = _flatten_meta(meta["cell_id"], meta, meta)
+    shaped["cell_status"] = body.cell_status
     return shaped

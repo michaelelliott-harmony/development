@@ -28,6 +28,25 @@ from harmony.services.api.database import get_connection, init_pool, close_pool 
 @pytest.fixture(scope="session", autouse=True)
 def _pool():
     init_pool()
+    # Apply M7 cell_status DDL to the test DB if not already present.
+    # The M7 migration (m7_temporal_field_activation.py) is produced and
+    # covers production gating. This IF NOT EXISTS block ensures the dev/test
+    # DB has the column before the status endpoint tests run.
+    # ADR-016 §2.3 — four-value CHECK matches migration DDL exactly.
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                ALTER TABLE cell_metadata
+                ADD COLUMN IF NOT EXISTS cell_status TEXT
+                    NOT NULL DEFAULT 'stable'
+                    CHECK (cell_status IN (
+                        'stable',
+                        'change_expected',
+                        'change_in_progress',
+                        'change_confirmed'
+                    ))
+            """)
+        conn.commit()
     yield
     close_pool()
 
