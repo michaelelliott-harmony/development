@@ -433,3 +433,77 @@ def test_patch_fidelity_full_replacement(client):
     assert fc["photorealistic"]["source"] == "photogrammetry_pipeline"
     # "source_a" must not survive — it was overwritten.
     assert fc["structural"].get("source") != "source_a"
+
+
+# -------------------------------------------------------------------------
+# Cell status update — PATCH /cells/{cell_key}/status
+# DEC-019 / ADR-016 §2.3 state machine.
+# 9 cases: happy path, 404, invalid value, extra fields, idempotency,
+# all four valid values (parametrized — 4 sub-cases).
+# -------------------------------------------------------------------------
+
+def test_patch_status_happy_path(client):
+    # TC1 — happy path: valid status → 200, cell_status persisted.
+    cid = client.post("/cells", json=GOSFORD_L8).json()["canonical_id"]
+    cell_key = GOSFORD_L8["cell_key"]
+
+    r = client.patch(f"/cells/{cell_key}/status", json={"cell_status": "change_expected"})
+    assert r.status_code == 200, r.text
+    body = r.json()
+    assert body["canonical_id"] == cid
+    assert body["cell_key"] == cell_key
+    assert body["cell_status"] == "change_expected"
+
+
+def test_patch_status_cell_not_found_returns_404(client):
+    # TC2 — cell_key does not exist → 404.
+    unknown_key = "hsam:r08:cc:0000000000000000"
+    r = client.patch(f"/cells/{unknown_key}/status", json={"cell_status": "stable"})
+    assert r.status_code == 404
+    assert r.json()["error"] == "cell_not_found"
+
+
+def test_patch_status_invalid_value_returns_422(client):
+    # TC3 — invalid status value ("demolishing") → 422.
+    client.post("/cells", json=GOSFORD_L8)
+    cell_key = GOSFORD_L8["cell_key"]
+    r = client.patch(f"/cells/{cell_key}/status", json={"cell_status": "demolishing"})
+    assert r.status_code == 422
+
+
+def test_patch_status_extra_fields_returns_422(client):
+    # TC4 — extra fields in body → 422 (extra="forbid").
+    client.post("/cells", json=GOSFORD_L8)
+    cell_key = GOSFORD_L8["cell_key"]
+    r = client.patch(f"/cells/{cell_key}/status", json={
+        "cell_status": "stable",
+        "unexpected_field": "value",
+    })
+    assert r.status_code == 422
+
+
+def test_patch_status_idempotent(client):
+    # TC5 — same PATCH twice → same result (idempotent).
+    client.post("/cells", json=GOSFORD_L8)
+    cell_key = GOSFORD_L8["cell_key"]
+
+    r1 = client.patch(f"/cells/{cell_key}/status", json={"cell_status": "change_in_progress"})
+    assert r1.status_code == 200
+    r2 = client.patch(f"/cells/{cell_key}/status", json={"cell_status": "change_in_progress"})
+    assert r2.status_code == 200
+    assert r1.json()["cell_status"] == r2.json()["cell_status"] == "change_in_progress"
+
+
+@pytest.mark.parametrize("status_value", [
+    "stable",
+    "change_expected",
+    "change_in_progress",
+    "change_confirmed",
+])
+def test_patch_status_all_valid_values(client, status_value):
+    # TC6 — each of the four ADR-016 §2.3 values is accepted → 200.
+    client.post("/cells", json=GOSFORD_L8)
+    cell_key = GOSFORD_L8["cell_key"]
+    r = client.patch(f"/cells/{cell_key}/status", json={"cell_status": status_value})
+    assert r.status_code == 200, r.text
+    assert r.json()["cell_status"] == status_value

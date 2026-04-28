@@ -152,6 +152,39 @@ class FidelityCoverageUpdate(BaseModel):
     photorealistic: PhotorealisticFidelity
 
 
+# -------------------------------------------------------------------------
+# Cell Status Update — PATCH /cells/{cell_key}/status (DEC-019)
+# ADR-016 §2.3 state machine: four valid values, full replacement semantics.
+# Consumed by Pillar 2 temporal trigger transition service.
+# Requires M7 migration (cell_status column, v0.2.0→v0.3.0) to be applied.
+# -------------------------------------------------------------------------
+
+_CELL_STATUS_VALUES = frozenset(
+    ("stable", "change_expected", "change_in_progress", "change_confirmed")
+)
+
+
+class CellStatusUpdate(BaseModel):
+    """Request body for PATCH /cells/{cell_key}/status.
+
+    Full replacement semantics — cell_status field is overwritten entirely.
+    Same value applied twice produces the same result (idempotent).
+    """
+    model_config = ConfigDict(extra="forbid")
+
+    cell_status: str
+
+    @field_validator("cell_status")
+    @classmethod
+    def _validate_cell_status(cls, v: str) -> str:
+        if v not in _CELL_STATUS_VALUES:
+            raise ValueError(
+                f"cell_status must be one of: "
+                f"{', '.join(sorted(_CELL_STATUS_VALUES))}. Got: {v!r}"
+            )
+        return v
+
+
 class CentroidECEF(BaseModel):
     x: float
     y: float
