@@ -21,6 +21,9 @@ from harmony.pipelines.temporal.adapter import (
 from harmony.pipelines.temporal.models import EventType, PermitRecord
 from tests.temporal.conftest import make_permit_record
 
+# Patch target for all NSW ePlanning HTTP calls (HTTP/2 via httpx)
+_HTTP_GET_H2 = "harmony.pipelines.temporal.adapter._http_get_h2"
+
 
 # ---------------------------------------------------------------------------
 # Interface contract
@@ -199,11 +202,11 @@ class TestRequestHeaders:
             def json(self):
                 return []
 
-        def fake_get(url, headers=None, timeout=None, params=None):
-            captured_calls.append({"url": url, "headers": headers, "params": params})
+        def fake_get_h2(url, headers, timeout):
+            captured_calls.append({"url": url, "headers": headers})
             return FakeResponse()
 
-        with patch("harmony.pipelines.temporal.adapter.requests.get", side_effect=fake_get):
+        with patch(_HTTP_GET_H2, side_effect=fake_get_h2):
             adapter._fetch_page("da", page_number=1, extra_filters={})
 
         assert len(captured_calls) == 1
@@ -213,9 +216,6 @@ class TestRequestHeaders:
         assert "PageSize" in call["headers"]
         assert "PageNumber" in call["headers"]
         assert "filters" in call["headers"]
-
-        # No parameters sent as query params
-        assert call.get("params") is None or call["params"] is None
 
         # Headers contain correct values
         assert call["headers"]["PageNumber"] == "1"
@@ -233,12 +233,12 @@ class TestRequestHeaders:
             def json(self):
                 return []
 
-        def fake_get(url, headers=None, timeout=None, params=None):
-            if headers and "filters" in headers:
+        def fake_get_h2(url, headers, timeout):
+            if "filters" in headers:
                 captured_filters.append(json.loads(headers["filters"]))
             return FakeResponse()
 
-        with patch("harmony.pipelines.temporal.adapter.requests.get", side_effect=fake_get):
+        with patch(_HTTP_GET_H2, side_effect=fake_get_h2):
             adapter._fetch_page("da", page_number=1, extra_filters={})
 
         assert len(captured_filters) == 1
@@ -292,7 +292,7 @@ class TestRetryBehaviour:
             status_code = 503
             text = "Service Unavailable"
 
-        with patch("harmony.pipelines.temporal.adapter.requests.get", return_value=BadResponse()):
+        with patch(_HTTP_GET_H2, return_value=BadResponse()):
             with patch("harmony.pipelines.temporal.adapter.time.sleep"):
                 result = adapter._fetch_page("da", page_number=1, extra_filters={})
 
@@ -308,7 +308,7 @@ class TestRetryBehaviour:
             def json(self):
                 return expected
 
-        with patch("harmony.pipelines.temporal.adapter.requests.get", return_value=GoodResponse()):
+        with patch(_HTTP_GET_H2, return_value=GoodResponse()):
             result = adapter._fetch_page("da", page_number=1, extra_filters={})
 
         assert result == expected

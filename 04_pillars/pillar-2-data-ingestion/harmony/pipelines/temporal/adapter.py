@@ -8,6 +8,13 @@
 # Constraint:   Minimum 2-second interval between requests to the same endpoint
 # Constraint:   No credentials stored — NSW ePlanning API is public
 # Constraint:   Geographic scope: Central Coast LGA only
+#
+# HTTP/2 NOTE (confirmed 2026-04-27):
+#   The environment's egress proxy enforces HTTP/2 for api.apps1.nsw.gov.au.
+#   requests/urllib3 uses HTTP/1.1 and receives 503 "DNS cache overflow" from
+#   the proxy. httpx with h2 installed uses HTTP/2 and receives 200. All NSW
+#   ePlanning API calls use _http_get_h2() below. Pillar 1 internal calls in
+#   transitions.py/resolver.py/fidelity.py remain on requests (no proxy constraint).
 
 from __future__ import annotations
 
@@ -18,7 +25,7 @@ from abc import ABC, abstractmethod
 from datetime import date, datetime
 from typing import Optional
 
-import requests
+import httpx
 
 from harmony.pipelines.temporal.models import EventType, PermitRecord
 
@@ -45,6 +52,22 @@ _MIN_REQUEST_INTERVAL_S = 2.0
 
 # Default page size for NSW API
 _PAGE_SIZE = 1000
+
+
+# ---------------------------------------------------------------------------
+# HTTP/2 helper — all NSW ePlanning API calls route through this function
+# so tests can patch a single target.
+# ---------------------------------------------------------------------------
+
+def _http_get_h2(url: str, headers: dict, timeout: int) -> httpx.Response:
+    """HTTP GET over HTTP/2 (required by the egress proxy for NSW ePlanning API).
+
+    Uses a short-lived httpx.Client per call. The NSW ePlanning API is stateless
+    and the adapter's rate limiting (see _respect_rate_limit) controls request
+    cadence independently of connection pooling.
+    """
+    with httpx.Client(http2=True) as client:
+        return client.get(url, headers=headers, timeout=timeout)
 
 
 # ---------------------------------------------------------------------------
@@ -298,7 +321,7 @@ class NSWPlanningPortalAdapter(PermitSourceAdapter):
                 time.sleep(retry_delay)
 
             try:
-                response = requests.get(url, headers=headers, timeout=self.timeout_s)
+                response = _http_get_h2(url, headers, self.timeout_s)
                 self._last_request_time[endpoint_key] = time.monotonic()
 
                 if response.status_code == 200:
@@ -325,14 +348,14 @@ class NSWPlanningPortalAdapter(PermitSourceAdapter):
                     response.text[:200],
                 )
 
-            except requests.exceptions.Timeout:
+            except httpx.TimeoutException:
                 logger.warning(
                     "NSW ePlanning %s page %d: timeout (attempt %d)",
                     endpoint_key,
                     page_number,
                     attempt + 1,
                 )
-            except requests.exceptions.RequestException as exc:
+            except httpx.RequestError as exc:
                 logger.warning(
                     "NSW ePlanning %s page %d: request error (attempt %d): %s",
                     endpoint_key,

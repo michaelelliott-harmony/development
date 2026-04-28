@@ -106,36 +106,41 @@ class TestAC1PermitAdapterConnectivity:
 
     @pytest.mark.network
     def test_ac1_live_da_api_returns_central_coast_records(self):
-        """AC1 (LIVE): Real API call to NSW ePlanning DA endpoint.
+        """AC1 (LIVE): Real API call to NSW ePlanning DA endpoint via HTTP/2.
 
-        REQUIRES NETWORK: api.apps1.nsw.gov.au must be in the allowed hosts list.
-        This test is marked @pytest.mark.network and will be skipped in
-        environments where the outbound proxy blocks this domain.
+        The environment's egress proxy enforces HTTP/2 for api.apps1.nsw.gov.au
+        (confirmed 2026-04-27). requests/urllib3 gets 503 "DNS cache overflow"
+        from the proxy on HTTP/1.1. httpx with h2 gets 200.
+
+        This test uses httpx directly, matching the production adapter behaviour.
 
         Run with: pytest -m network
         """
-        import requests
+        import httpx
+
         headers = {
             "PageSize": "1",
             "PageNumber": "1",
             "filters": '{"CouncilName":["Central Coast Council"]}',
         }
+        url = "https://api.apps1.nsw.gov.au/eplanning/data/v0/OnlineDA"
+
         try:
-            resp = requests.get(
-                "https://api.apps1.nsw.gov.au/eplanning/data/v0/OnlineDA",
-                headers=headers,
-                timeout=15,
-            )
+            with httpx.Client(http2=True) as client:
+                resp = client.get(url, headers=headers, timeout=15)
         except Exception as exc:
             pytest.skip(f"Network unavailable for live API test: {exc}")
 
         if resp.status_code == 403 and "allowlist" in resp.text.lower():
             pytest.skip(
-                "API host blocked by outbound proxy — add api.apps1.nsw.gov.au "
-                "to the environment's allowed hosts list to enable AC1 live test"
+                "API host blocked by outbound proxy — "
+                "add api.apps1.nsw.gov.au to the allowed hosts list"
             )
 
-        assert resp.status_code == 200, f"Unexpected HTTP {resp.status_code}: {resp.text[:200]}"
+        assert resp.status_code == 200, (
+            f"NSW ePlanning DA endpoint returned HTTP {resp.status_code}: "
+            f"{resp.text[:200]}"
+        )
         data = resp.json()
         # Unwrap any list or dict wrapper
         records = data if isinstance(data, list) else next(
