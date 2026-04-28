@@ -61,7 +61,7 @@ The pipeline is designed for programmatic data acquisition from day one. Source 
 | Dataset | Source | Access Method | Format | Licence | Notes |
 |---|---|---|---|---|---|
 | Land Zoning | NSW Planning Portal | ArcGIS REST API | GeoJSON (query response) | CC-BY 3.0 AU | `mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer` — filter by Central Coast LGA bounding box |
-| Cadastral Boundaries | NSW Spatial Services (DCDB) | WFS (OGC Web Feature Service) | GML/GeoJSON | CC-BY | NSW Cadastre WFS endpoint — filter by Central Coast bounding box. Lot/DP numbers provide natural dedup keys |
+| Cadastral Boundaries | NSW Spatial Services (DCDB) | ArcGIS REST API | GeoJSON (query response) | CC-BY | `maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Cadastre/MapServer` — layer ID 9 (Lot). **`inSR=4326` mandatory** (native SR is Web Mercator). WFS not publicly accessible. 133,943 lots in bbox. |
 | Building Footprints | OpenStreetMap | Overpass API or Geofabrik regional extract | GeoJSON (Overpass) or PBF (Geofabrik) | ODbL | Tag filter: `building=*` within Central Coast bounding box. Community-maintained, good Australian urban coverage, no commercial dependency |
 | Road Network | OpenStreetMap | Overpass API or Geofabrik regional extract | GeoJSON (Overpass) or PBF (Geofabrik) | ODbL | Tag filter: `highway=*` within Central Coast bounding box. Rich attribution: road class, surface, lanes, speed, one-way, bridge/tunnel |
 | Permit Feeds (M7) | NSW Planning Portal | DA API, CDC API, PCC API | JSON | CC-BY 3.0 AU | Development applications, construction certificates, occupation certificates. Access confirmation pending via Data Broker |
@@ -101,12 +101,13 @@ source_layer: 0
 source_bbox: [-33.55, 151.15, -33.15, 151.75]
 source_crs: "EPSG:4326"
 
-# Example: WFS source
-source_type: wfs
-source_url: "https://maps.six.nsw.gov.au/arcgis/services/..."
-source_typename: "NSW_Cadastre:Lot"
+# Example: ArcGIS REST source (cadastral)
+source_type: arcgis_rest
+source_url: "https://maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Cadastre/MapServer/9"
 source_bbox: [-33.55, 151.15, -33.15, 151.75]
-source_crs: "EPSG:4283"
+source_params:
+  inSR: 4326
+source_crs: "EPSG:4326"
 
 # Example: OSM Overpass source
 source_type: osm_overpass
@@ -137,8 +138,8 @@ When a bulk file download arrives (e.g., from the Data Broker email), the pipeli
 | 7 | Error handling philosophy | Quarantine model. Failed features written to `quarantine/` output with full error context. Pipeline continues. Ingestion run report includes quarantine counts and summaries. Dataset with >5% quarantined features triggers warning requiring human review. | Avoids both silent data loss (skip model) and pipeline fragility (halt model). Standard pattern for production data pipelines. |
 | 8 | Known names population at ingestion | Pillar 2 populates `known_names` where source data includes place names, street names, property names, or other human-readable identifiers. | Low-cost addition that significantly accelerates Pillar 5's ability to resolve natural language references. Gap 5 (named-entity resolution) is closed at the substrate layer — `known_names` index is ready. |
 | 9 | Pipeline orchestration | Lightweight custom Python CLI for MVP. Deferred Airflow/Prefect until dataset count exceeds manual management threshold (~20+ datasets on scheduled ingestion). | Airflow and Prefect introduce deployment infrastructure that is premature for the current stage. A `harmony-ingest` CLI with structured JSON logging is sufficient and dramatically simpler. |
-| 10 | Temporal trigger architecture (ADR-015) | Pull-based polling of NSW Planning Portal ePlanning API. Daily minimum poll frequency, hourly for high-activity areas. Cell state machine: stable → change_expected → change_in_progress → change_confirmed. `valid_from` set from completion certificate date, not ingestion timestamp. | Defined by Dr. Voss in the Milestone 7 specification. Pull model is universally reliable; push model to be evaluated in ADR-015 as an alternative and adopted if NSW Planning Portal supports webhooks. |
-| 11 | Temporal field activation timing | Activated in Milestone 7 via a migration with up and down functions. Migration requires Mikey's approval before execution. ADR-015 must be accepted before migration runs. | Bitemporal fields were reserved in Pillar 1 (ADR-007) specifically for this purpose. Activation is gated on the ADR and approval to maintain decision-gate discipline. |
+| 10 | Temporal trigger architecture (ADR-016) | Pull-based polling of NSW Planning Portal ePlanning API. Daily minimum poll frequency, hourly for high-activity areas. Cell state machine: stable → change_expected → change_in_progress → change_confirmed. `valid_from` set from completion certificate date, not ingestion timestamp. | Defined by Dr. Voss in the Milestone 7 specification. Pull model is universally reliable; push model to be evaluated in ADR-016 as an alternative and adopted if NSW Planning Portal supports webhooks. |
+| 11 | Temporal field activation timing | Activated in Milestone 7 via a migration with up and down functions. Migration requires Mikey's approval before execution. ADR-016 must be accepted before migration runs. | Bitemporal fields were reserved in Pillar 1 (ADR-007) specifically for this purpose. Activation is gated on the ADR and approval to maintain decision-gate discipline. |
 | 12 | Data sourcing strategy (V1.1) | Programmatic-first. Pipeline connects directly to live API endpoints (WFS, ArcGIS REST, Overpass API) and streams features. File-based ingestion retained as fallback. OpenStreetMap used for buildings and roads; NSW government APIs for zoning and cadastral. | Scalable, replicable, avoids commercial dependencies. File adapters remain for bulk downloads and test fixtures. Manifest-level pivot between API and file sources requires no code changes. |
 
 ---
@@ -151,8 +152,8 @@ When a bulk file download arrives (e.g., from the Data Broker email), the pipeli
 | GDAL/OGR (via Fiona, Rasterio) | Source format I/O — Shapefile, GeoJSON, GeoPackage, GeoTIFF, KML, FlatGeobuf | Confirmed | Industry standard; no serious alternative for format breadth |
 | Shapely (via GEOS) | Geometry operations, validation, spatial predicates | Confirmed | No meaningful alternative in the Python ecosystem |
 | PyProj (via PROJ) | CRS transformation and detection | Confirmed | Definitive coordinate transformation library |
-| OWSLib | WFS client for OGC web services (cadastral data) | Confirmed (V1.1) | Standard Python library for OGC service access |
-| requests + GeoJSON | ArcGIS REST API client (zoning data) | Confirmed (V1.1) | Lightweight HTTP client for ArcGIS REST query endpoints |
+| OWSLib | WFS client for OGC web services | Removed (V1.1.1) | NSW Cadastre WFS is not publicly accessible (confirmed by endpoint validation 2026-04-19). Cadastral data accessed via ArcGIS REST instead. Retained as a dependency only if future jurisdictions expose WFS. |
+| requests + GeoJSON | ArcGIS REST API client (zoning and cadastral data) | Confirmed (V1.1) | Lightweight HTTP client for ArcGIS REST query endpoints. Used for both zoning (Planning Portal) and cadastral (Spatial Services). |
 | OSMnx or overpy | OpenStreetMap data extraction (buildings, roads) | Confirmed (V1.1) | OSMnx for network-aware road extraction; overpy for general Overpass API queries |
 | GeoPandas | Batch spatial operations during pipeline processing | Confirmed | Convenience layer built on Shapely/Fiona/PyProj; not a hard dependency |
 | DuckDB | Analytical queries during pipeline internals | Confirmed | Lighter than PostgreSQL for intermediate pipeline work |
@@ -199,9 +200,9 @@ When a bulk file download arrives (e.g., from the Data Broker email), the pipeli
 |---|----------|-------------|--------------------------|------------------|
 | 1 | `lod_availability` field structure | This field describes how rendered LOD levels map to available data — it is a Pillar 3 consumption concern, not a Pillar 2 production concern | Pillar 2 must not write to this field or define its structure; leave it reserved | Pre-Pillar 3 build (ADR-016) |
 | 2 | `asset_bundles` reference format | The typed pointer format for external asset bundles depends on the asset storage system chosen, which is a Pillar 3 architecture decision | Pillar 2 populates `asset_bundle_count` as a denormalised integer count; the reference format is defined when the storage system is chosen | Pre-Pillar 3 build (ADR-016) |
-| 3 | Push vs pull model for permit feeds | Dr. Voss defaults to pull (polling), which universally works. Push (webhooks) may be available from some jurisdictions and would be more responsive | ADR-015 must document the evaluation. Build the pull adapter first; add push support as a non-breaking enhancement if available | ADR-015 drafting phase |
+| 3 | Push vs pull model for permit feeds | Dr. Voss defaults to pull (polling), which universally works. Push (webhooks) may be available from some jurisdictions and would be more responsive | ADR-016 must document the evaluation. Build the pull adapter first; add push support as a non-breaking enhancement if available | ADR-016 drafting phase |
 | 4 | Multi-jurisdiction permit adapter architecture | The NSWPlanningPortalAdapter should implement a generic PermitSourceAdapter interface for future jurisdictions (QLD, VIC, etc.) | Design the adapter as a pluggable interface from day one. Do not hard-code NSW-specific logic into the state transition service | Milestone 7 design phase |
-| 5 | Cell state lifecycle completion | What happens after `change_confirmed` when re-ingestion of structural data occurs? Should there be a `re_ingested` status that returns the cell to `stable`? | Do not add a fifth status value now. Document this as a known gap in ADR-015. The `change_confirmed → stable` transition on successful re-ingestion can be added as a Pillar 4 or future Pillar 2 enhancement | Post-Milestone 7 |
+| 5 | Cell state lifecycle completion | What happens after `change_confirmed` when re-ingestion of structural data occurs? Should there be a `re_ingested` status that returns the cell to `stable`? | Do not add a fifth status value now. Document this as a known gap in ADR-016. The `change_confirmed → stable` transition on successful re-ingestion can be added as a Pillar 4 or future Pillar 2 enhancement | Post-Milestone 7 |
 | 6 | Raster and 3D mesh ingestion | Current milestones cover vector formats only. LiDAR (LAS/LAZ), photogrammetric meshes, and GeoTIFF ingestion are required for full dual fidelity | Source adapters must be designed as pluggable per-format modules. Do not couple the pipeline architecture to vector-only assumptions | Post-Pillar 2 MVP or Pillar 3 integration phase |
 
 ---
@@ -216,11 +217,11 @@ Build the Harmony Data Ingestion Pipeline — a production-grade system that con
 **Input files to read before beginning:**
 
 - `Project Context/master-spec-v1.0.1.md` — governing specification
-- `Project Context/HARMONY_P2_DATA_INGESTION_PIPELINE_BRIEF_V1.1.md` — this document (V1.1 — programmatic-first sourcing)
+- `Project Context/HARMONY_P2_DATA_INGESTION_PIPELINE_BRIEF_V1.1.md` — this document (V1.1 — programmatic-first sourcing, M7 spec incorporated)
 - `Project Context/PILLAR_2_HANDOFF_BRIEF.md` — complete Pillar 1 context transfer
-- `Project Context/HARMONY_P2_M7_SPEC.docx` — Dr. Voss's Milestone 7 specification (authoritative)
+- `Project Context/ADR-016-temporal-trigger-architecture.md` — temporal trigger ADR (includes cell state machine, fidelity coverage structure, address resolution hierarchy, error handling)
 - `Project Context/HARMONY_DASHBOARD_UPDATE_PROTOCOL_V1.0.docx` — reporting protocol
-- `Project Context/ADR-015-temporal-trigger-architecture.md` — temporal trigger ADR
+- `Project Context/ADR-016-temporal-trigger-architecture.md` — temporal trigger ADR
 - `Project Context/HARMONY_P2_ENTITY_SCHEMAS.md` — entity type definitions for zoning and cadastral
 - Pillar 1 files: `identity-schema.md` (v0.1.3), `id_generation_rules.md`, `alias_namespace_rules.md`, `ADR_INDEX.md`
 
@@ -244,14 +245,13 @@ South: -33.55, North: -33.15, West: 151.15, East: 151.75
 
 **Task 2: Source Adapter Layer (Milestone 1)**
 
-- Description: Build source adapters for four access patterns. All adapters implement a common interface: `read(source_config) → iterator of raw features`. Adapters know nothing about Harmony — they only know their source type. The `source_config` comes from the dataset manifest.
-  - **File adapter** (`adapters/file_adapter.py`): Reads GeoJSON, Shapefile, and GeoPackage from disk. Format auto-detection from file extension.
-  - **WFS adapter** (`adapters/wfs_adapter.py`): Connects to OGC WFS endpoints using OWSLib. Supports bounding box filtering and CRS declaration. Used for NSW Cadastre.
-  - **ArcGIS REST adapter** (`adapters/arcgis_rest_adapter.py`): Queries ArcGIS MapServer REST endpoints. Supports spatial queries with bounding box, layer selection, and pagination (ArcGIS limits results per query). Returns features as GeoJSON. Used for NSW Planning Portal zoning data.
+- Description: Build source adapters for three access patterns. All adapters implement a common interface: `read(source_config) → iterator of raw features`. Adapters know nothing about Harmony — they only know their source type. The `source_config` comes from the dataset manifest.
+  - **File adapter** (`adapters/file_adapter.py`): Reads GeoJSON, Shapefile, and GeoPackage from disk. Format auto-detection from file extension. Used for bulk downloads, test fixtures, and as a fallback if any API is unavailable.
+  - **ArcGIS REST adapter** (`adapters/arcgis_rest_adapter.py`): Queries ArcGIS MapServer REST endpoints. Supports spatial queries with bounding box, layer selection, and pagination (ArcGIS caps results at 1,000 per page — adapter must paginate using `resultOffset` and `resultRecordCount`). Returns features as GeoJSON. Supports `inSR` parameter for coordinate system specification. Used for both NSW Planning Portal zoning data (layer 2 on mapprod3) and NSW Cadastre lot data (layer 9 on maps.six.nsw.gov.au). Note: WFS is not publicly accessible for NSW Cadastre — ArcGIS REST is the only working programmatic path (confirmed by endpoint validation 2026-04-19).
   - **OSM adapter** (`adapters/osm_adapter.py`): Queries the Overpass API with tag and bounding box filters. Converts OSM elements (nodes, ways, relations) to GeoJSON features. Handles Overpass API rate limiting (max 1 request per 5 seconds). Used for buildings and roads.
-- Output: `harmony/pipelines/adapters/base.py` (interface), `file_adapter.py`, `wfs_adapter.py`, `arcgis_rest_adapter.py`, `osm_adapter.py`; test suite for each adapter
+- Output: `harmony/pipelines/adapters/base.py` (interface), `file_adapter.py`, `arcgis_rest_adapter.py`, `osm_adapter.py`; test suite for each adapter
 - Save to: `harmony/pipelines/adapters/`
-- Success condition: All four adapters successfully connect to their respective sources and emit raw features as a stream. File adapter reads a local test fixture. WFS adapter connects to NSW Cadastre and retrieves lot features for Central Coast bounding box. ArcGIS REST adapter connects to the Planning Portal zoning MapServer and retrieves zoning features. OSM adapter queries Overpass for buildings within the Central Coast bounding box. CLI command `harmony-ingest read <manifest>` prints feature counts and sample geometries for any source type.
+- Success condition: All three adapters successfully connect to their respective sources and emit raw features as a stream. File adapter reads a local test fixture. ArcGIS REST adapter connects to both the Planning Portal zoning MapServer (layer 2) and the NSW Cadastre MapServer (layer 9, with `inSR=4326`) and retrieves features for the Central Coast bounding box. OSM adapter queries Overpass for buildings within the Central Coast bounding box. CLI command `harmony-ingest read <manifest>` prints feature counts and sample geometries for any source type.
 
 ---
 
@@ -318,21 +318,63 @@ South: -33.55, North: -33.15, West: 151.15, East: 151.75
 
 ---
 
-**Task 10: ADR-015 Drafting (Milestone 7 prerequisite)**
+**Task 10: ADR-016 Drafting (Milestone 7 prerequisite)**
 
-- Description: Draft ADR-015: Temporal Trigger Architecture — Permit Feed Integration. Following the brief defined in Dr. Voss's Milestone 7 specification. The ADR must address: the permit source and polling strategy, the address-to-cell resolution logic, the cell state machine (stable → change_expected → change_in_progress → change_confirmed), the `valid_from` population rule (completion certificate date, not ingestion timestamp), push vs pull evaluation, single-source vs multi-source architecture, event-sourced vs snapshot-updated cell state. The ADR must be reviewed and accepted by Mikey before any schema changes are written. Note: a draft ADR-015 may already exist in `Project Context/ADR-015-temporal-trigger-architecture.md` — if so, review and finalise rather than drafting from scratch.
-- Output: `docs/adr/ADR-015-temporal-trigger-architecture.md`
+- Description: Draft ADR-016: Temporal Trigger Architecture — Permit Feed Integration. Following the brief defined in Dr. Voss's Milestone 7 specification. The ADR must address: the permit source and polling strategy, the address-to-cell resolution logic, the cell state machine (stable → change_expected → change_in_progress → change_confirmed), the `valid_from` population rule (completion certificate date, not ingestion timestamp), push vs pull evaluation, single-source vs multi-source architecture, event-sourced vs snapshot-updated cell state. The ADR must be reviewed and accepted by Mikey before any schema changes are written. Note: a draft ADR-016 may already exist in `Project Context/ADR-016-temporal-trigger-architecture.md` — if so, review and finalise rather than drafting from scratch.
+- Output: `docs/adr/ADR-016-temporal-trigger-architecture.md`
 - Save to: `docs/adr/`
-- Success condition: ADR-015 follows the established format (Context, Decision, Consequences, Alternatives Considered). All items from Dr. Voss's ADR brief are addressed. ADR is flagged as `requires_approval: true` in session output.
+- Success condition: ADR-016 follows the established format (Context, Decision, Consequences, Alternatives Considered). All items from Dr. Voss's ADR brief are addressed. ADR is flagged as `requires_approval: true` in session output.
 
 ---
 
 **Task 11: Temporal Trigger Layer (Milestone 7)**
 
-- Description: Following Dr. Voss's authoritative Milestone 7 specification, build the temporal trigger subsystem. This includes: (D2) NSW Planning Portal adapter that polls the DA, CDC, and PCC APIs and normalises permit records; (D3) permit-to-cell resolver using spatial intersection at r10 with address fallback via known_names; (D4) cell state transition service implementing the event-to-transition mapping table — idempotent, with audit logging; (D5) temporal field activation migration with up and down functions — requires Mikey's approval before execution; (D6) fidelity reset logic that sets `photorealistic.status = pending` on `change_confirmed` events; (D7) full test suite including the Gosford DA fixture. The adapter must implement a generic `PermitSourceAdapter` interface for future multi-jurisdiction support.
-- Output: `harmony/pipelines/temporal/adapter.py`, `resolver.py`, `transitions.py`; migration file; test suite; session progress report with HARMONY UPDATE line
+- Description: Build the temporal trigger subsystem that connects the Harmony Cell registry to the NSW Planning Portal's permit feeds, enabling real-time cell state transitions driven by real-world building events. The architecture is defined in ADR-016 (temporal trigger architecture). This task must not begin until ADR-016 has been accepted by Mikey.
+
+- **Deliverables:**
+
+  - **D1 — ADR-016 accepted:** Confirm ADR-016 exists in `docs/adr/` with status `Accepted`. If status is still `Draft`, stop and flag as blocker. Do not proceed with any schema changes.
+  - **D2 — NSW Planning Portal adapter:** Polls the DA, CDC, and PCC APIs on a configurable schedule (daily default, hourly for high-activity areas). Normalises permit records to a standard internal `PermitEvent` format. Handles API timeouts with exponential backoff (30s, 120s, 480s), max 3 retries. Implements a generic `PermitSourceAdapter` interface — NSW-specific logic is isolated in `NSWPlanningPortalAdapter`. The state transition service must never import NSW-specific code.
+  - **D3 — Permit-to-cell resolver:** Maps permit polygon/address to Harmony Cell(s) using this resolution hierarchy: (1) spatial intersection of permit polygon against cell grid at r10, flagging all intersecting cells; (2) if polygon unavailable or invalid, fall back to address geocoding against the cell's `known_names` index; (3) if resolution fails, log as unresolved with full permit record and surface in daily PM report — do not discard.
+  - **D4 — Cell state transition service:** Applies the following event-to-transition mapping. Idempotent — applying the same event twice produces no state change. Every transition is logged to an append-only event audit log with: cell_key, event_type, permit_id, permit_source, event_date, ingested_at, previous_status, new_status.
+
+    | Permit Event | Cell Transition | Fields Updated |
+    |---|---|---|
+    | DA lodged | stable → change_expected | cell_status, updated_at |
+    | Construction Certificate issued | change_expected → change_in_progress | cell_status, updated_at |
+    | Occupation Certificate issued | change_in_progress → change_confirmed | cell_status, valid_from (= certificate date), fidelity_coverage.photorealistic.status = pending, updated_at |
+    | DA withdrawn or refused | change_expected → stable | cell_status, updated_at |
+
+  - **D5 — Temporal field activation migration:** Migration script to activate `valid_from`, `valid_to`, `version_of`, `temporal_status` on the cell record. Must include both up and down functions. Must execute cleanly in both directions against the local dev database. **This migration requires Mikey's approval before execution — flag as `requires_approval: true` in session output.**
+  - **D6 — Fidelity reset logic:** On `change_confirmed` transition, reset the photorealistic slot in `fidelity_coverage` for all affected cells: `photorealistic.status = pending`, `photorealistic.source = null`, `photorealistic.captured_at = null`. Do not modify structural slot. Do not attempt to re-ingest photorealistic data — `pending` is a signal to Pillar 3, not a trigger for immediate action.
+  - **D7 — Test suite:** Unit tests for adapter, resolver, and transition service. Integration test using a known Gosford DA as the fixture (a real development application from the Central Coast LGA). All tests must pass before milestone is marked complete.
+  - **D8 — Session progress report:** Filed to `PM/sessions/` on completion in the standard format. Must include a HARMONY UPDATE line for Milestone 7.
+
+- **Constraints and non-negotiables:**
+  - Do not implement a public-facing contribution API — that is a future milestone
+  - Do not attempt to re-ingest photorealistic data — `pending` is a signal, not a trigger
+  - Do not modify the `canonical_id` or `cell_key` of any existing cell record — state transitions update status fields only
+  - Do not execute the temporal field migration without Mikey's approval
+  - Do not proceed if ADR-016 has not been accepted — produce the ADR first
+  - Do not bypass the Pillar 1 HTTP API — if the resolver requires a query pattern not currently supported, flag as a gap and request an API extension
+  - Geographic scope is limited to the Central Coast LGA (Gosford and Wyong council areas)
+  - The NSW Planning Portal API is a public endpoint — no credentials should be stored. Minimum 5-second interval between requests. Do not attempt to circumvent rate limits.
+
+- Output: `harmony/pipelines/temporal/adapter.py`, `resolver.py`, `transitions.py`, `events.py` (event log); migration file; test suite; session progress report
 - Save to: `harmony/pipelines/temporal/`
-- Success condition: All 8 acceptance criteria from Dr. Voss's specification pass — AC1 through AC8 as defined in Section 6 of HARMONY_P2_M7_SPEC.docx. No partial credit.
+
+- **Acceptance criteria — all must pass, no partial credit:**
+
+  | # | Criterion | How Verified |
+  |---|---|---|
+  | AC1 | Permit feed connects and polls successfully | Adapter integration test returns ≥1 permit record for Central Coast LGA |
+  | AC2 | Permit address resolves to Harmony Cell | Gosford DA test fixture resolves to correct cell(s) at r10 resolution |
+  | AC3 | State transitions apply correctly | All four transitions in the mapping table produce correct cell_status values |
+  | AC4 | valid_from reflects permit date not ingestion date | Occupation certificate test produces valid_from = certificate date, not datetime.now() |
+  | AC5 | fidelity_coverage resets on change_confirmed | After change_confirmed transition, photorealistic.status = pending in affected cell records |
+  | AC6 | Transitions are idempotent | Applying the same event twice produces no duplicate state change or log entry |
+  | AC7 | Migration has up and down functions | Migration file executes cleanly in both directions against the local dev database |
+  | AC8 | ADR-016 is accepted before schema changes | ADR-016 file exists in docs/adr/ with status Accepted before D5 migration is executed |
 
 ---
 
@@ -353,7 +395,7 @@ Produce a session summary saved as `PM/sessions/YYYY-MM-DD-pillar-2-completion.m
 | 6 | Overpass API rate limiting | OSM queries throttled during high-traffic periods | Implement respectful polling with minimum 5-second intervals. Cache responses locally. For large extracts, prefer Geofabrik PBF download over Overpass queries. |
 | 7 | GDAL version inconsistency across development environments | Different GDAL versions produce subtly different geometry outputs | Docker container with pinned GDAL version from day one. All pipeline execution runs inside the container. |
 | 8 | Dual fidelity MVP limitation: no photorealistic data source for Central Coast yet | Milestone 5–6 can only exercise structural fidelity path | Acceptable for MVP. Schema and pipeline architecture carry both slots from day one. `fidelity_coverage.photorealistic.status = pending` is the honest representation. First photorealistic data expected during Pillar 3 integration. |
-| 9 | WFS endpoint for NSW Cadastre may require authentication or have rate limits | Cadastral adapter fails to connect or is throttled | Validate endpoint before Sprint 1 (see Claude Code Endpoint Validation Brief). If authentication required, fall back to Data Broker bulk download via file adapter. |
+| 9 | ~~WFS endpoint for NSW Cadastre~~ | **Resolved.** WFS is not publicly accessible. ArcGIS REST at `maps.six.nsw.gov.au` layer 9 is the confirmed path, with `inSR=4326` mandatory. 133,943 lots returned in validation. |
 
 ---
 
