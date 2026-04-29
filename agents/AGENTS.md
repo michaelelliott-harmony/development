@@ -27,10 +27,12 @@ This is the team's shared memory and current project state.
 ## Current Project State
 
 Active Pillar: 2 — Data Ingestion Pipeline
-Pre-Sprint 1 — Branch B audit in progress
+Sprint 1 IN PROGRESS — dispatched to Dr. Adeyemi 2026-04-29
 Schema Version: v0.2.0
-Tests Passing: ~297
-M7 exists as standalone module on main. M1-M6 exist in unmerged Branch B pending compliance audit before Sprint 1 dispatches.
+Tests Passing: ~297 (pre-Sprint 1 baseline)
+Sprint 1 branch: feature/p2-sprint-1-cherry-pick (not yet pushed by Adeyemi)
+M7 exists as standalone module on main. M1-M6 cherry-picked from Branch B into Sprint 1 branch with 5 V2.0 compliance mods.
+Dispatch package: docs/dispatch/dispatch-p2-sprint-1-20260429/
 ADRs Locked: 18 (next available ADR-025)
 Last Update: 29 Apr 2026
 
