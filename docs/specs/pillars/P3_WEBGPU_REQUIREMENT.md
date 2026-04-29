@@ -24,7 +24,7 @@ Pillar 3 ships with WebGPU support. A Pillar 3 client without
 WebGPU is not a Pillar 3 client. It is a Track 1 client.
 
 WebGL2 is acceptable **only** for the Track 1 production
-infrastructure path — streaming progressive mesh per DEC-022. A
+infrastructure path — streaming progressive mesh per DEC-023. A
 WebGL2 client renders Track 1. A WebGPU client renders Track 1 and
 Track 2.
 

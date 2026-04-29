@@ -67,7 +67,7 @@ or do they recognise it as a very good map?
 
 **Overlay:** WS-F open data reconstructed imagery applied for this
 checkpoint (NSW Spatial Services 10cm aerial + GA 5m DEM, CC-BY).
-Per DEC-022, the demo experience uses reconstructed imagery, not
+Per DEC-023, the demo experience uses reconstructed imagery, not
 Track 1 streaming mesh alone. This checkpoint tests the demo
 configuration, not the production-only configuration.
 

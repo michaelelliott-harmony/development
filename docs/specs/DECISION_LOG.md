@@ -411,7 +411,7 @@ single consistent slot name across all ADRs.
 
 ---
 
-### DEC-022 | 2026-04-29 | Pillar 3 — Rendering Strategy
+### DEC-023 | 2026-04-29 | Pillar 3 — Rendering Strategy
 
 **Decision:** Option C adopted. Track 1 streaming progressive mesh as
 production infrastructure. Gosford CBD open data reconstruction as demo
@@ -432,8 +432,9 @@ ADR and is unaffected. WS-F gains its own brief under Pillar 3.
 
 **Numbering note:** Originally requested as DEC-019. The log is
 append-only and DEC-019 was taken on 2026-04-28 by the Pillar 1 PATCH
-status endpoint decision. Renumbered to the next available slot
-(DEC-022). Flagged in PR for Voss / founder confirmation.
+status endpoint decision. Subsequently DEC-022 was taken on 2026-04-29
+by the ADR-023 Schema Reservation acceptance entry. Renumbered to the
+next available slot (DEC-023).
 — Dr. Lin Park, Chief Rendering Architect
 
 ---
