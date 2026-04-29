@@ -17,7 +17,7 @@ This is a read-only validation exercise. You are not building adapters, not inge
 Read the following project files before beginning:
 
 - `HARMONY_P2_ENDPOINT_VALIDATION_BRIEF.md` — the detailed task brief with endpoint URLs, query formats, and expected outputs
-- `HARMONY_P2_DATA_INGESTION_PIPELINE_BRIEF_V1.1.md` — Section 3 (Data Sourcing Strategy) defines the four data sources and their access methods
+- `HARMONY_P2_DATA_INGESTION_PIPELINE_BRIEF_V2_0.docx` — Section 3 (Data Sourcing Strategy) defines the four data sources and their access methods
 - `HARMONY_P2_ENTITY_SCHEMAS.md` — defines the fields we need from each source (use this to verify that the API responses contain the expected attributes)
 
 ## Central Coast Pilot Bounding Box
