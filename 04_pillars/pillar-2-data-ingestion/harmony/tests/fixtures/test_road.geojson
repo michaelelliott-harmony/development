@@ -1,0 +1,58 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "road_001",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [151.300, -33.420],
+          [151.310, -33.420],
+          [151.320, -33.415],
+          [151.330, -33.410]
+        ]
+      },
+      "properties": {
+        "highway": "primary",
+        "name": "Pacific Highway",
+        "ref": "A1",
+        "lanes": "4",
+        "maxspeed": "80",
+        "oneway": "no",
+        "surface": "asphalt"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "road_002",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [151.400, -33.350],
+          [151.405, -33.345]
+        ]
+      },
+      "properties": {
+        "highway": "residential",
+        "name": "Quiet Street",
+        "maxspeed": "50"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "road_003_zerolen",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [151.300, -33.420],
+          [151.300, -33.420]
+        ]
+      },
+      "properties": {
+        "highway": "service",
+        "name": "Zero Length Road"
+      }
+    }
+  ]
+}

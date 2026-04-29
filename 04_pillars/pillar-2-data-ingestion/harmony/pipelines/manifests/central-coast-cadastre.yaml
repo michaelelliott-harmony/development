@@ -1,0 +1,59 @@
+# Harmony Pillar 2 — Dataset Manifest
+# NSW Spatial Services — DCDB Cadastral Lots
+# Source: ArcGIS REST MapServer (WFS was attempted; returned HTTP 400)
+#
+# Endpoint validation (2026-04-19):
+#   - WFS at maps.six.nsw.gov.au and portal.spatial.nsw.gov.au both returned 400
+#   - ArcGIS REST at maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Cadastre/MapServer/9 works
+#   - inSR=4326 required in all bbox queries (native SR is Web Mercator 102100)
+#   - 133,943 features in Central Coast bbox
+#   - field name is shape_Area (mixed case), not shapestarea
+
+dataset_name: nsw_dcdb_cadastral_lots_central_coast
+dataset_version: "2026-04"
+description: "NSW DCDB Cadastral Lots (Lot Layer) — Central Coast LGA"
+
+# --- Source ---
+source_type: arcgis_rest
+source_url: "https://maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Cadastre/MapServer/9"
+source_bbox: [-33.55, 151.15, -33.15, 151.75]   # [south, west, north, east]
+source_crs: "EPSG:4326"
+source_where: "1=1"
+source_page_size: 1000
+
+# --- Provenance (ADR-018, DEC-013) ---
+source_authority: nsw_spatial_services
+source_tier: 1       # Tier 1 — Authoritative (NSW government)
+positional_accuracy_m: 5.0   # Use source `accuracy` field if present; default 5.0
+
+# --- Target ---
+target_entity_type: cadastral_lot
+fidelity_class: structural
+region_code: cc
+resolution_level_floor: 8   # Parcel scale
+
+# --- Deduplication ---
+# Composite key derived from planlabel: lot_number + plan_type + plan_number
+# cadid is also unique but less stable across data releases
+dedup_strategy: source_id
+dedup_source_id_field: cadid
+
+# --- Attribute mapping (source ArcGIS field → Harmony field) ---
+attribute_mapping:
+  cadid: cad_id
+  lotnumber: lot_number
+  sectionnumber: section_number
+  planlabel: plan_label
+  shape_Area: area_sqm
+  createdate: observation_date
+
+# --- known_names population (p2-entity-schemas.md §Entity Type 2) ---
+# Combined "Lot {lot_number} {plan_type}{plan_number}" derived by extractor
+# planlabel is the direct human-readable identifier
+known_names_fields:
+  - planlabel    # e.g. "1//DP123456"
+
+# --- Geometry ---
+allowed_geometry_types:
+  - Polygon
+  - MultiPolygon

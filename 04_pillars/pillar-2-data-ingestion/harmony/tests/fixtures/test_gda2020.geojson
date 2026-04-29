@@ -1,0 +1,25 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "lot_gda2020_001",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.30000, -33.42000],
+          [151.30100, -33.42000],
+          [151.30100, -33.42100],
+          [151.30000, -33.42100],
+          [151.30000, -33.42000]
+        ]]
+      },
+      "properties": {
+        "cadid": "12345678",
+        "lotnumber": "1",
+        "planlabel": "1//DP123456",
+        "shape_Area": 12345.67
+      }
+    }
+  ]
+}

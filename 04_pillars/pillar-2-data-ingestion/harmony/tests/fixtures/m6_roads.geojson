@@ -1,0 +1,110 @@
+{
+  "type": "FeatureCollection",
+  "name": "central_coast_roads_m6_fixture",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "road_m6_001",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [151.325, -33.420],
+          [151.330, -33.420],
+          [151.340, -33.420],
+          [151.350, -33.420],
+          [151.360, -33.420]
+        ]
+      },
+      "properties": {
+        "highway": "primary",
+        "name": "Pacific Highway",
+        "ref": "A1",
+        "lanes": "4",
+        "maxspeed": "80",
+        "oneway": "no",
+        "surface": "asphalt",
+        "lit": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "road_m6_002",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [151.338, -33.415],
+          [151.338, -33.420],
+          [151.338, -33.425],
+          [151.338, -33.430],
+          [151.338, -33.435]
+        ]
+      },
+      "properties": {
+        "highway": "secondary",
+        "name": "Mann Street",
+        "lanes": "2",
+        "maxspeed": "50",
+        "oneway": "no",
+        "surface": "asphalt",
+        "lit": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "road_m6_003",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [151.340, -33.420],
+          [151.342, -33.422],
+          [151.344, -33.424],
+          [151.346, -33.426]
+        ]
+      },
+      "properties": {
+        "highway": "residential",
+        "name": "Gosford Street",
+        "maxspeed": "50",
+        "oneway": "no",
+        "surface": "asphalt"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "road_m6_004",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [151.338, -33.420],
+          [151.342, -33.420],
+          [151.344, -33.421],
+          [151.346, -33.422]
+        ]
+      },
+      "properties": {
+        "highway": "residential",
+        "name": "Kibble Place",
+        "maxspeed": "50",
+        "oneway": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "road_m6_005",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [151.330, -33.427],
+          [151.340, -33.427],
+          [151.350, -33.425]
+        ]
+      },
+      "properties": {
+        "highway": "tertiary",
+        "name": "Henry Parry Drive",
+        "maxspeed": "60",
+        "surface": "asphalt"
+      }
+    }
+  ]
+}

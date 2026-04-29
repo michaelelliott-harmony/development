@@ -1,0 +1,185 @@
+{
+  "type": "FeatureCollection",
+  "name": "central_coast_buildings_m6_fixture",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "bld_m6_001",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.33820, -33.42440],
+          [151.33870, -33.42440],
+          [151.33870, -33.42480],
+          [151.33820, -33.42480],
+          [151.33820, -33.42440]
+        ]]
+      },
+      "properties": {
+        "building": "residential",
+        "name": "12 Gosford Street",
+        "addr:housenumber": "12",
+        "addr:street": "Gosford Street",
+        "addr:suburb": "Gosford",
+        "building:levels": "2",
+        "height": "7.5"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bld_m6_002",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.34020, -33.42440],
+          [151.34070, -33.42440],
+          [151.34070, -33.42480],
+          [151.34020, -33.42480],
+          [151.34020, -33.42440]
+        ]]
+      },
+      "properties": {
+        "building": "residential",
+        "name": "14 Gosford Street",
+        "addr:housenumber": "14",
+        "addr:street": "Gosford Street",
+        "addr:suburb": "Gosford",
+        "building:levels": "1",
+        "height": "4.2"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bld_m6_003",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.34220, -33.42450],
+          [151.34270, -33.42450],
+          [151.34270, -33.42490],
+          [151.34220, -33.42490],
+          [151.34220, -33.42450]
+        ]]
+      },
+      "properties": {
+        "building": "house",
+        "addr:housenumber": "16",
+        "addr:street": "Gosford Street",
+        "addr:suburb": "Gosford",
+        "building:levels": "1"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bld_m6_004",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.33880, -33.42650],
+          [151.33940, -33.42650],
+          [151.33940, -33.42700],
+          [151.33880, -33.42700],
+          [151.33880, -33.42650]
+        ]]
+      },
+      "properties": {
+        "building": "residential",
+        "addr:housenumber": "22",
+        "addr:street": "Mann Street",
+        "addr:suburb": "Gosford",
+        "building:levels": "3",
+        "height": "11.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bld_m6_005",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.33900, -33.41900],
+          [151.33960, -33.41900],
+          [151.33960, -33.41950],
+          [151.33900, -33.41950],
+          [151.33900, -33.41900]
+        ]]
+      },
+      "properties": {
+        "building": "commercial",
+        "name": "Gosford Business Centre",
+        "addr:housenumber": "100",
+        "addr:street": "Pacific Highway",
+        "addr:suburb": "Gosford",
+        "building:levels": "4",
+        "height": "14.5"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bld_m6_006",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.34100, -33.41850],
+          [151.34180, -33.41850],
+          [151.34180, -33.41920],
+          [151.34100, -33.41920],
+          [151.34100, -33.41850]
+        ]]
+      },
+      "properties": {
+        "building": "commercial",
+        "name": "Central Coast Medical Centre",
+        "addr:housenumber": "105",
+        "addr:street": "Pacific Highway",
+        "addr:suburb": "Gosford",
+        "building:levels": "2",
+        "height": "8.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bld_m6_007",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.34300, -33.42600],
+          [151.34360, -33.42600],
+          [151.34360, -33.42650],
+          [151.34300, -33.42650],
+          [151.34300, -33.42600]
+        ]]
+      },
+      "properties": {
+        "building": "yes",
+        "addr:housenumber": "7",
+        "addr:street": "Kibble Place",
+        "addr:suburb": "Gosford",
+        "building:levels": "1"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bld_m6_008",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.34400, -33.42580],
+          [151.34460, -33.42580],
+          [151.34460, -33.42630],
+          [151.34400, -33.42630],
+          [151.34400, -33.42580]
+        ]]
+      },
+      "properties": {
+        "building": "apartments",
+        "name": "Gosford Apartments",
+        "addr:housenumber": "8",
+        "addr:street": "Kibble Place",
+        "addr:suburb": "Gosford",
+        "building:levels": "6",
+        "height": "21.0"
+      }
+    }
+  ]
+}

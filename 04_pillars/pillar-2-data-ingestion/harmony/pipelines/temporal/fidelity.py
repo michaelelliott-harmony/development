@@ -18,7 +18,7 @@ import logging
 import os
 from typing import Optional
 
-import requests
+import httpx
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +46,7 @@ def read_current_fidelity(cell_key: str, p1_url: str) -> Optional[dict]:
     the photorealistic slot.
     """
     try:
-        resp = requests.get(
+        resp = httpx.get(
             f"{p1_url.rstrip('/')}/resolve/cell-key/{cell_key}",
             timeout=10,
         )
@@ -101,7 +101,7 @@ def reset_photorealistic_fidelity(
     }
 
     try:
-        resp = requests.patch(
+        resp = httpx.patch(
             f"{p1_url}/cells/{cell_key}/fidelity",
             json=body,
             timeout=10,
@@ -119,7 +119,7 @@ def reset_photorealistic_fidelity(
             resp.text[:300],
         )
         return False
-    except requests.exceptions.RequestException as exc:
+    except (httpx.RequestError, httpx.HTTPStatusError) as exc:
         logger.error("Fidelity reset request failed for %s: %s", cell_key, exc)
         return False
 

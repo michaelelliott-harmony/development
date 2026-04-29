@@ -18,7 +18,7 @@ import sys
 import os
 from typing import Optional
 
-import requests
+import httpx
 
 from harmony.pipelines.temporal.models import (
     EventType,
@@ -74,7 +74,7 @@ def _derive_cell_key_from_latlon(lat: float, lon: float, p1_url: str) -> Optiona
 
     # Fallback: query the Pillar 1 API for the cell at these coordinates
     try:
-        resp = requests.get(
+        resp = httpx.get(
             f"{p1_url}/resolve/latlon",
             params={"lat": lat, "lon": lon, "resolution": _SPATIAL_RESOLUTION},
             timeout=10,
@@ -105,7 +105,7 @@ def _query_entities_by_lot_plan(
         return []
 
     try:
-        resp = requests.get(
+        resp = httpx.get(
             f"{p1_url}/resolve/known-name",
             params={"q": composite, "entity_subtype": "lot"},
             timeout=10,
@@ -136,7 +136,7 @@ def _query_entities_by_address(address: str, p1_url: str) -> list[str]:
         return []
 
     try:
-        resp = requests.get(
+        resp = httpx.get(
             f"{p1_url}/resolve/known-name",
             params={"q": address.strip()},
             timeout=10,
