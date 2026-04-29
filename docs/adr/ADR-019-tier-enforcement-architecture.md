@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| **Status** | Proposed |
+| **Status** | Accepted |
 | **Date** | 2026-04-23 |
 | **Deciders** | Dr. Mara Voss (Principal Architect), Mikey (founder) |
 | **Pillar** | 2 — Data Ingestion Pipeline |
@@ -174,4 +174,4 @@ without requiring the signing infrastructure to be live.
 
 ---
 
-*ADR-019 — Proposed — 2026-04-23*
+*ADR-019 — Accepted — 2026-04-29*

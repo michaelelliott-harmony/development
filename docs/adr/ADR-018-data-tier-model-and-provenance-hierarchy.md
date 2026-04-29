@@ -1,6 +1,6 @@
 # ADR-018: Data Tier Model and Provenance Hierarchy
 
-**Status:** Proposed
+**Status:** Accepted
 **Date:** 2026-04-23
 **Deciders:** Mikey (founder), Dr. Mara Voss (Principal Architect)
 **Pillar:** 2 (Data Ingestion Pipeline)

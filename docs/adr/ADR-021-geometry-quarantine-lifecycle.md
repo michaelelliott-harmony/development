@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| **Status** | Proposed |
+| **Status** | Accepted |
 | **Date** | 2026-04-23 |
 | **Deciders** | Dr. Mara Voss (Principal Architect), Mikey (founder) |
 | **Pillar** | 2 — Data Ingestion Pipeline (Milestone 3) |
@@ -193,4 +193,4 @@ aggregation, reason-code SLOs, and per-reason remediation runbooks.
 
 ---
 
-*ADR-021 — Proposed — 2026-04-23*
+*ADR-021 — Accepted — 2026-04-29*

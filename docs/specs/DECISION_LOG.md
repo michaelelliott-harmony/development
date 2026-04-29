@@ -182,7 +182,7 @@ critical fidelity slots becomes impossible via any code path. Every
 Pillar 2 ingestion adapter must participate in the tier-authorisation
 registry and emit the canonical provenance tuple.
 **ADR:** ADR-019 — Tier Enforcement Architecture
-**Status:** Proposed
+**Status:** Accepted
 **Spec version:** Pending V1.2.0
 
 ---
@@ -203,7 +203,7 @@ Reprocessing is tractable — records carry enough metadata to be
 re-transformed if the transformation pipeline evolves. NTv2 grid file
 becomes a packaged dependency with CI-verified checksum.
 **ADR:** ADR-020 — CRS Normalisation Strategy
-**Status:** Proposed
+**Status:** Accepted
 **Spec version:** Pending V1.2.0
 
 ---
@@ -227,7 +227,7 @@ are never weakened by "was the flag checked" questions — the predicate
 does not exist. Quarantine-review API is separate from the main
 resolution API with distinct auth scope.
 **ADR:** ADR-021 — Geometry Quarantine Lifecycle
-**Status:** Proposed
+**Status:** Accepted
 **Spec version:** Pending V1.2.0
 
 ---
