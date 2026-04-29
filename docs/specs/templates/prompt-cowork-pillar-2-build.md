@@ -18,7 +18,7 @@ Read ALL of the following before writing any code. These are your source of trut
 - `master-spec-v1_0_1.md` — the Harmony Master Specification V1.0. Defines the three North Stars, five-pillar structure, agent architecture, and Gap Register. Every design decision must be evaluated against all three North Stars simultaneously.
 
 **Pillar 2 build instructions:**
-- `HARMONY_P2_DATA_INGESTION_PIPELINE_BRIEF_V1.1.md` — the authoritative Pillar Brief. Contains resolved decisions, tools and technologies, inter-pillar interfaces, and the complete CoWork task sequence (Tasks 1–11). Section 3 defines the programmatic-first data sourcing strategy with four adapter types. Section 8 contains your task list — including the full Milestone 7 specification with deliverables (D1–D8), acceptance criteria (AC1–AC8), and constraints, all inline. Follow the tasks in order.
+- `HARMONY_P2_DATA_INGESTION_PIPELINE_BRIEF_V2_0.docx` — the authoritative Pillar Brief. Contains resolved decisions, tools and technologies, inter-pillar interfaces, and the complete CoWork task sequence (Tasks 1–11). Section 3 defines the programmatic-first data sourcing strategy with four adapter types. Section 8 contains your task list — including the full Milestone 7 specification with deliverables (D1–D8), acceptance criteria (AC1–AC8), and constraints, all inline. Follow the tasks in order.
 
 **Pillar 1 handoff:**
 - `PILLAR_2_HANDOFF_BRIEF.md` — complete context transfer from Pillar 1. Contains the API contract (12 endpoints), schema version (v0.1.3), reserved fields, ADR index (ADR-001 through ADR-014), and known constraints. Read Section 3 (API Contract) carefully — this is the interface you write to.
@@ -71,7 +71,7 @@ A file adapter is also built for reading local GeoJSON, Shapefile, and GeoPackag
 
 ## Build Sequence
 
-Execute the tasks defined in Section 8 of `HARMONY_P2_DATA_INGESTION_PIPELINE_BRIEF_V1.1.md`, Tasks 1 through 11, in order. Each task includes a description, expected outputs, save locations, and success conditions.
+Execute the tasks defined in Section 8 of `HARMONY_P2_DATA_INGESTION_PIPELINE_BRIEF_V2_0.docx`, Tasks 1 through 11, in order. Each task includes a description, expected outputs, save locations, and success conditions.
 
 **Summary of tasks:**
 

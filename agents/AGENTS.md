@@ -54,4 +54,4 @@ G1 — Approve source allowlist — Sprint 1 — 15 min — THIS WEEK
 - docs/adr/ADR_INDEX.md — all architectural decisions
 - agents/AUTHORITY_MATRIX.md — decision routing table
 - agents/security/SECURITY_POLICY.md — security non-negotiables
-- 04_pillars/pillar-2-data-ingestion/docs/p2-data-ingestion-brief-v1-1.md
+- 04_pillars/pillar-2-data-ingestion/docs/HARMONY_P2_DATA_INGESTION_PIPELINE_BRIEF_V2_0.docx
