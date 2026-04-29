@@ -330,6 +330,57 @@ No new ADR required — covered by existing decisions.
 
 ---
 
+### DEC-020 | 2026-04-29 | Cross-pillar — Geospatial Standards Compliance
+
+**Decision:** Accepted ADR-024, resolving five geospatial standards gaps
+(STD-V01 through STD-V05) identified by Dr. Kofi Boateng's standards brief.
+Five binding sub-decisions:
+
+1. **STD-V01 (ISO 19115):** Structured `source_lineage` JSONB object on
+   entity and cell-populating records, consolidating four existing flat
+   provenance fields and adding three new sub-fields (`source_licence`,
+   `process_steps[]`, `processing_organisation`). Compatible with HCI-V03
+   (`references.asset_bundles`) — orthogonal concerns. `provenance_hash`
+   (ADR-019) updated to include `source_lineage` in the canonicalised tuple;
+   hash versioned to distinguish pre- and post-lineage records.
+
+2. **STD-V02 (ISO 19157):** `data_quality` object (`completeness_percent`,
+   `positional_accuracy_metres`, `last_validated` — all nullable) placed on
+   **asset bundle records**, not cell records. Quality describes the captured
+   representation, not the spatial container. Cell-level quality derived at
+   read time.
+
+3. **STD-V03 (ISO 19111):** `crs_authority` (TEXT, default `'EPSG'`) and
+   `crs_code` (INTEGER, default `4326`) added to cell geometry records. Full
+   ISO 19111 CRS object rejected — single-CRS system; local ENU frame is
+   runtime-derived. Near-zero engineering cost.
+
+4. **STD-V04 (ISO 19115):** `canonical_id` mapped as `fileIdentifier` in
+   metadata exports and as `id` in OGC API Features responses. Mapping rule
+   only — no schema change.
+
+5. **STD-V05 (OGC Connected Systems):** `valid_from` mandatory on entity
+   records where source dataset carries a feature date. Cell-level
+   `valid_from` remains governed by ADR-016 §2.4 (temporal trigger
+   architecture). Boundary: Pillar 2 owns entity `valid_from`; Pillar 4
+   owns cell `valid_from`. Records with missing `valid_from` from
+   date-carrying datasets routed to quarantine (ADR-021, Q4_SCHEMA_VIOLATION).
+
+**Impact:** Harmony's schema and export layer now satisfy ISO 19115 (ANZLIC
+profile), ISO 19157, ISO 19111, and OGC API Connected Systems requirements
+for Australian government spatial data interchange. Three additive schema
+migrations required (STD-V01, STD-V02, STD-V03) — produced, not executed;
+Mikey gate applies. All Pillar 2 ingestion adapters must emit
+`source_lineage` and enforce `valid_from` population where mandated.
+
+**ADR:** ADR-024 — Geospatial Standards Compliance
+
+**Status:** Accepted
+
+**Spec version:** Pending V1.2.0
+
+---
+
 ## Unprocessed Content
 
 A set of variation files existed under `Master_Spec_Variations/variations/pending/`

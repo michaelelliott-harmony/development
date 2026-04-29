@@ -35,7 +35,7 @@
 | ADR-021 | Geometry Quarantine Lifecycle | Accepted | `ADR-021-geometry-quarantine-lifecycle.md` |
 | ADR-022 | Rendering Asset Format and Data Contract | Accepted | `ADR-022-rendering-asset-format-and-data-contract.md` |
 | ADR-023 | Harmonic Cell Field Descriptor Schema Reservation | Proposed | `ADR-023-harmonic-cell-field-descriptor-schema-reservation.md` |
-| ADR-024 | Geospatial Standards Compliance (ISO 19115 / 19157 / 19111 / OGC) | Proposed | `ADR-024-geospatial-standards-compliance.md` |
+| ADR-024 | Geospatial Standards Compliance (ISO 19115 / 19157 / 19111 / OGC) | Accepted | `ADR-024-geospatial-standards-compliance.md` |
 
 ---
 

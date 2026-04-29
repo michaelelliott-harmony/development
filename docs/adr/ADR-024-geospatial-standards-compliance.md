@@ -2,13 +2,15 @@
 
 | Field | Value |
 |---|---|
-| **Status** | Proposed |
+| **Status** | Accepted |
 | **Date** | 2026-04-29 |
+| **Acceptance Date** | 2026-04-29 |
 | **Author** | Dr. Mara Voss (Principal Architect), responding to standards brief by Dr. Kofi Boateng (CGO) |
+| **Accepted By** | Dr. Mara Voss (Principal Architect) — implementation ADR, within authority per AUTHORITY_MATRIX |
 | **Supersedes** | None |
 | **Related ADRs** | ADR-007 (Temporal Versioning), ADR-016 (Temporal Trigger Architecture), ADR-018 (Data Tier Model), ADR-020 (CRS Normalisation Strategy), ADR-022 (Rendering Asset Format and Data Contract) |
 | **Pillar** | Cross-pillar — schema changes in Pillars 1 and 2; mapping rules for Pillar 3 export layer |
-| **Approval Required** | Dr. Mara Voss (this ADR). Migration execution requires Mikey gate. |
+| **Migration Gate** | Schema migrations (STD-V01, STD-V02, STD-V03) require Mikey approval before execution. |
 
 ---
 
@@ -366,4 +368,4 @@ as reality time — the exact failure mode ADR-016 was designed to prevent).
 
 ---
 
-*ADR-024 — Geospatial Standards Compliance — Proposed April 29, 2026*
+*ADR-024 — Geospatial Standards Compliance — Accepted April 29, 2026*
