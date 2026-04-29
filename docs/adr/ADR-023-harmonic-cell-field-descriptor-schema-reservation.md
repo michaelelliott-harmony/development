@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| **Status** | Proposed — requires Dr. Voss acceptance |
+| **Status** | Accepted |
 | **Date** | April 26, 2026 |
 | **Author** | Jessica Grace Luis (ADR Agent) |
 | **Supersedes** | None |
@@ -256,4 +256,4 @@ This ADR should be reviewed when:
 
 ---
 
-*ADR-023 — Harmonic Cell Field Descriptor Schema Reservation — Proposed April 26, 2026*
+*ADR-023 — Harmonic Cell Field Descriptor Schema Reservation — Accepted April 29, 2026*
