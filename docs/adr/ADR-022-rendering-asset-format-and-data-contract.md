@@ -71,7 +71,7 @@ Every asset bundle carries the following schema:
       "confidence": "number (0.0–1.0)",
       "timestamp": "ISO 8601 (moment of assessment)"
     },
-    "schematic": {
+    "structural": {
       "status": "enum (available | pending | splat_pending)",
       "source_tier": "integer or null (1–4 if status='available' or 'splat_pending'; nullable if status='pending')",
       "confidence": "number (0.0–1.0)",
@@ -109,10 +109,10 @@ CHECK (
     OR (fidelity_coverage->'photorealistic'->>'status') != 'available'
 )
 
--- Tier 4 (synthetic/AI-generated) cannot be marked 'available' in schematic fidelity
+-- Tier 4 (synthetic/AI-generated) cannot be marked 'available' in structural fidelity
 CHECK (
-    (fidelity_coverage->'schematic'->>'source_tier')::int != 4
-    OR (fidelity_coverage->'schematic'->>'status') != 'available'
+    (fidelity_coverage->'structural'->>'source_tier')::int != 4
+    OR (fidelity_coverage->'structural'->>'status') != 'available'
 )
 
 -- LOD chain must have at least one entry
@@ -166,7 +166,7 @@ Every asset bundle carries **two independent `source_tier` fields** with distinc
 Example:
 - A building has provenance Tier 1 (measured via LIDAR survey)
 - Its photorealistic fidelity is Tier 1 (from the LIDAR data)
-- Its schematic fidelity is Tier 3 (derived from the LIDAR via automated simplification)
+- Its structural fidelity is Tier 3 (derived from the LIDAR via automated simplification)
 - This is valid: fidelity Tier 3 ≥ provenance Tier 1
 
 Counterexample (invalid):
@@ -177,7 +177,7 @@ Counterexample (invalid):
 **Tier 4 Exclusion on Both Fields:**
 
 The Tier 4 exclusion (cannot be `available` in either fidelity state) applies to **both fields independently**:
-- If provenance `source_tier` = 4, no fidelity slot can be `available` (even if fidelity `source_tier` is lower, e.g., Tier 4 geometry + Tier 3 schematic texture is forbidden)
+- If provenance `source_tier` = 4, no fidelity slot can be `available` (even if fidelity `source_tier` is lower, e.g., Tier 4 geometry + Tier 3 structural fidelity is forbidden)
 - If a fidelity's `source_tier` = 4, that fidelity cannot be `available` (regardless of provenance tier)
 
 This ensures the hard boundary: no geometry carrying Tier 4 at any level can be presented to users as "finished" or "ready for rendering".

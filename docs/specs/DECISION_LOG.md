@@ -381,6 +381,36 @@ Mikey gate applies. All Pillar 2 ingestion adapters must emit
 
 ---
 
+### DEC-021 | 2026-04-29 | Cross-pillar — Schema Terminology
+
+**Decision:** The geometry fidelity slot in `fidelity_coverage` is canonically
+named **`structural`**, not `schematic`. ADR-022 (Rendering Asset Format and
+Data Contract) used `schematic` in six locations (§D2 JSON schema, §D2 CHECK
+constraints, §D4b examples). All six occurrences corrected to `structural` to
+align with the established term used in ADR-016 §2.5, ADR-018, ADR-019 §3
+(CHECK constraint), DEC-013 (tier enforcement SQL), DEC-017 (API validation),
+the Pillar 2 implementation code (`transitions.py`, `fidelity.py`), the Pillar
+2 test suite, the Pillar 2 entity schemas, and the master specification's
+foundational dual-fidelity language ("sub-metre structural for robotic
+navigation"). `structural` describes the physical structure of the built
+environment — footprints, volumes, obstacle geometry. `schematic` describes a
+rendering style and is a category error when applied to a data fidelity
+classification.
+
+**Impact:** ADR-022 §D2 JSON schema key, §D2 SQL CHECK constraints, and §D4b
+examples now read `structural` instead of `schematic`. No schema migration
+required — the CHECK constraints in ADR-022 had not yet been applied to any
+database. Sprint 1's Tier 4 CHECK constraint build can proceed against a
+single consistent slot name across all ADRs.
+
+**ADR:** ADR-022 (amended), ADR-016 §2.5 (unchanged, confirmed canonical)
+
+**Status:** Accepted
+
+**Spec version:** Pending V1.2.0
+
+---
+
 ## Unprocessed Content
 
 A set of variation files existed under `Master_Spec_Variations/variations/pending/`
