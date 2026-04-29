@@ -381,6 +381,70 @@ Mikey gate applies. All Pillar 2 ingestion adapters must emit
 
 ---
 
+### DEC-021 | 2026-04-29 | Pillar 2 — HTTP Client Library Standard
+
+**Decision:** `httpx` is the canonical HTTP client for all Pillar 2 outbound
+HTTP calls — both external government API endpoints and Pillar 1 internal API
+calls. `requests` must not be introduced in new Pillar 2 code. The decision
+was routed to Dr. Voss per the authority matrix (architectural question, no
+covering ADR); the ruling below reflects her authority.
+
+Three independent grounds converge on the same answer:
+
+1. **Hard technical constraint — egress proxy HTTP/2 enforcement.**
+   `adapter.py` (M7, main) carries a confirmed note (2026-04-27): the
+   environment's egress proxy enforces HTTP/2 for `api.apps1.nsw.gov.au`.
+   `requests`/urllib3 sends HTTP/1.1 and receives 503 "DNS cache overflow".
+   `httpx` with `h2` installed sends HTTP/2 and receives 200. All four Central
+   Coast source datasets (NSW Planning Portal, NSW Spatial Services, OSM) route
+   through government or government-adjacent endpoints subject to the same proxy
+   constraint. Branch B's use of `requests` for these adapters will reproduce
+   the same 503 failure in Sprint 1 unless migrated.
+
+2. **Pillar 1 tooling consistency.**
+   Pillar 1's own `seed_dev.py` and Stage 2 acceptance tests (`test_p1_stage2_acceptance.py`)
+   already use `httpx` for all Pillar 1 internal API calls. M7's internal
+   temporal modules (`resolver.py`, `fidelity.py`, `transitions.py`) use
+   `requests` for the same Pillar 1 API — this is an existing inconsistency on
+   main, not the established standard. Standardising on `httpx` resolves it and
+   aligns Pillar 2 with the consuming pattern Pillar 1 itself models.
+
+3. **Async readiness for Class II Navigation Agent query patterns.**
+   `httpx` exposes identical sync (`httpx.Client`) and async (`httpx.AsyncClient`)
+   APIs. Pillar 2 pipeline stages currently run synchronously; Class II
+   Navigation Agents will require concurrent cell and entity resolution queries.
+   Using `httpx` now allows async adoption at the call-site level without a
+   library swap or interface change later. `requests` has no async surface and
+   would require replacement at that point.
+
+**Impact:**
+- Branch B audit (Section 5.2 checklist) gains an additional item: confirm
+  all adapter HTTP calls use `httpx`; flag any `requests` import in
+  `harmony/pipelines/` as a gap requiring remediation before Sprint 1 merges.
+- M7's `resolver.py`, `fidelity.py`, and `transitions.py` carry `requests`
+  for Pillar 1 internal calls. These are on main and working; migration to
+  `httpx` is not urgent but should be scheduled no later than the Sprint 2
+  clean-up pass to eliminate the inconsistency.
+- `httpx[http2]` (i.e. with the `h2` extra) is the required install target
+  wherever Pillar 2 code runs. `h2` must appear in `requirements.txt` /
+  `pyproject.toml` alongside `httpx`.
+- `requests` remains in the dependency tree only where it is already present
+  as a transitive dependency of other packages. No new direct `requests`
+  imports in Pillar 2 code.
+
+**ADR:** None required — implementation-level library decision covered by
+ADR-013 (API Layer Architecture, D1 async-capable note) and the established
+Pillar 1 tooling precedent. Logged here only.
+
+**Authority:** Dr. Mara Voss (routed by Marcus Webb per authority matrix —
+architectural question, cross-pillar compatibility concern).
+
+**Status:** Accepted
+
+**Spec version:** Pending V1.2.0
+
+---
+
 ## Unprocessed Content
 
 A set of variation files existed under `Master_Spec_Variations/variations/pending/`
