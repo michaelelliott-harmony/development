@@ -411,6 +411,37 @@ single consistent slot name across all ADRs.
 
 ---
 
+### DEC-022 | 2026-04-29 | Cross-pillar — Schema Reservation
+
+**Decision:** Accepted ADR-023 — Harmonic Cell Field Descriptor Schema
+Reservation. A nullable JSONB column `field_descriptors` (DEFAULT NULL) is
+reserved on `cell_metadata` records. The column follows the established
+reserve-then-activate pattern (ADR-007 reserved bitemporal fields; ADR-016
+activated them). No data writes permitted until a future activation ADR is
+accepted and Gap 8 (Harmonic Cell Field Sensing Architecture) is closed in
+the gap register. JSON Schema contract defined at the application layer
+(§2.2); database enforces valid JSON only. Forward-compatible: string-typed
+`field_type` (not database enum), `additionalProperties: true` — new field
+types require no schema migration. Scope limited to `cell_metadata` only;
+entity-level field descriptors require a separate ADR with independent
+architectural justification.
+
+**Impact:** Schema reservation enables future HCI Phase 1 activation without
+a migration on a larger production table. Cell schema gains one nullable
+JSONB column — no impact on existing Pillar 1 read/write paths, volumetric
+extension (ADR-015), bitemporal fields (ADR-007/ADR-016), or Pillar 2
+ingestion pipeline. Migration required to add the column — produced, not
+executed; Mikey gate applies. V4 architectural compatibility validated by
+Dr. Voss (April 27, 2026; §3.1 of ADR-023).
+
+**ADR:** ADR-023 — Harmonic Cell Field Descriptor Schema Reservation
+
+**Status:** Accepted
+
+**Spec version:** Pending V1.2.0
+
+---
+
 ## Unprocessed Content
 
 A set of variation files existed under `Master_Spec_Variations/variations/pending/`
