@@ -35,6 +35,7 @@
 | ADR-021 | Geometry Quarantine Lifecycle | Proposed | `ADR-021-geometry-quarantine-lifecycle.md` |
 | ADR-022 | Rendering Asset Format and Data Contract | Accepted | `ADR-022-rendering-asset-format-and-data-contract.md` |
 | ADR-023 | Harmonic Cell Field Descriptor Schema Reservation | Proposed | `ADR-023-harmonic-cell-field-descriptor-schema-reservation.md` |
+| ADR-024 | Geospatial Standards Compliance (ISO 19115 / 19157 / 19111 / OGC) | Proposed | `ADR-024-geospatial-standards-compliance.md` |
 
 ---
 
@@ -54,7 +55,7 @@ ADR-016 currently here.
 
 ## Next Available Number
 
-ADR-024.
+ADR-025.
 
 > Note: ADR-017 was allocated to the Stage 2 implementation ADR even though
 > the Stage 2 dispatch brief (`docs/dispatch/dispatch-p1-stage2-20260420/`)
@@ -76,6 +77,9 @@ Builder Agents producing new ADRs must:
   v0.1.3 merge (in nested source tree)
 - **2026-04-20** — ADR-015 populated from stub (Stage 2 dispatch);
   ADR-017 added for Stage 2 implementation decisions
+- **2026-04-29** — ADR-024 entry added (Proposed). Geospatial Standards
+  Compliance covering STD-V01 through STD-V05 per Dr. Boateng's standards
+  brief. Drafted by Dr. Voss. Next available number updated to ADR-025.
 - **2026-04-23** — ADR-018 entry added (Proposed — content pending);
   pillar-2 docs filed at `04_pillars/pillar-2-data-ingestion/docs/`;
   zip's pre-reorg ADR-015 draft archived at
