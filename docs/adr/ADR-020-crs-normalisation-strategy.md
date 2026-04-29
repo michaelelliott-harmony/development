@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| **Status** | Proposed |
+| **Status** | Accepted |
 | **Date** | 2026-04-23 |
 | **Deciders** | Dr. Mara Voss (Principal Architect), Mikey (founder) |
 | **Pillar** | 2 — Data Ingestion Pipeline (Milestone 2) |
@@ -199,4 +199,4 @@ eliminates it is freely available and a 3 MB dependency.
 
 ---
 
-*ADR-020 — Proposed — 2026-04-23*
+*ADR-020 — Accepted — 2026-04-29*

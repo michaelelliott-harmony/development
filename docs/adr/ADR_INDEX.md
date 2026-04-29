@@ -29,10 +29,10 @@
 | ADR-015 | Adaptive Volumetric Cell Extension | Accepted | `ADR-015-adaptive-volumetric-cell-extension.md` (populated 2026-04-20 by p1-stage2 dispatch) |
 | ADR-016 | Temporal Trigger Architecture — Permit Feed Integration | Accepted | `ADR-016-temporal-trigger-architecture.md` (renumbered from ADR-015 during reorganisation) |
 | ADR-017 | Pillar 1 Stage 2 Implementation Decisions | Accepted | `ADR-017-pillar-1-stage-2-implementation.md` |
-| ADR-018 | Data Tier Model and Provenance Hierarchy | Proposed | `ADR-018-data-tier-model-and-provenance-hierarchy.md` |
-| ADR-019 | Tier Enforcement Architecture | Proposed | `ADR-019-tier-enforcement-architecture.md` |
-| ADR-020 | CRS Normalisation Strategy | Proposed | `ADR-020-crs-normalisation-strategy.md` |
-| ADR-021 | Geometry Quarantine Lifecycle | Proposed | `ADR-021-geometry-quarantine-lifecycle.md` |
+| ADR-018 | Data Tier Model and Provenance Hierarchy | Accepted | `ADR-018-data-tier-model-and-provenance-hierarchy.md` |
+| ADR-019 | Tier Enforcement Architecture | Accepted | `ADR-019-tier-enforcement-architecture.md` |
+| ADR-020 | CRS Normalisation Strategy | Accepted | `ADR-020-crs-normalisation-strategy.md` |
+| ADR-021 | Geometry Quarantine Lifecycle | Accepted | `ADR-021-geometry-quarantine-lifecycle.md` |
 | ADR-022 | Rendering Asset Format and Data Contract | Accepted | `ADR-022-rendering-asset-format-and-data-contract.md` |
 | ADR-023 | Harmonic Cell Field Descriptor Schema Reservation | Proposed | `ADR-023-harmonic-cell-field-descriptor-schema-reservation.md` |
 
