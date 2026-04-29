@@ -4,7 +4,7 @@
 # ┌─────────────────────────────────────────────────────────────────┐
 # │  REQUIRES MIKEY APPROVAL BEFORE EXECUTION                       │
 # │  requires_approval: true                                         │
-# │  Gate: ADR-023 Accepted ✓ (April 27, 2026 — Dr. Mara Voss)      │
+# │  Gate: ADR-023 Status — Proposed (requires Dr. Voss acceptance) │
 # │  Gate: Migration execution requires Telegram approval from Mikey │
 # │  Authority: AUTHORITY_MATRIX.md — Migration execution: Mikey only│
 # │  Decision Log: ADR-023 reservation for HCI Phase 1 field support │

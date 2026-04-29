@@ -27,11 +27,12 @@ This is the team's shared memory and current project state.
 ## Current Project State
 
 Active Pillar: 2 — Data Ingestion Pipeline
-Active Sprint: Sprint 1 — Adapters + Validation (M1, M2)
+Pre-Sprint 1 — Branch B audit in progress
 Schema Version: v0.2.0
-Tests Passing: 181 (Pillar 1 complete — 172 original + 9 fidelity endpoint tests)
-ADRs Locked: 18 (next available ADR-023)
-Last Update: 26 Apr 2026
+Tests Passing: ~297
+M7 exists as standalone module on main. M1-M6 exist in unmerged Branch B pending compliance audit before Sprint 1 dispatches.
+ADRs Locked: 18 (next available ADR-025)
+Last Update: 29 Apr 2026
 
 ## Pillar Status
 
