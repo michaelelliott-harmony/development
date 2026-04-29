@@ -442,6 +442,34 @@ Dr. Voss (April 27, 2026; §3.1 of ADR-023).
 
 ---
 
+### DEC-023 | 2026-04-29 | Pillar 3 — Rendering Strategy
+
+**Decision:** Option C adopted. Track 1 streaming progressive mesh as
+production infrastructure. Gosford CBD open data reconstruction as demo
+overlay (NSW Spatial Services 10cm aerial + GA 5m DEM — CC-BY licensed,
+no proprietary dependencies). The fundraise demo experience is decoupled
+from the production build timeline.
+
+**Impact:** Pillar 3 build sequence unchanged. Open data reconstruction
+pipeline (WS-F) runs in parallel. Demo experience at P3-EC2 uses
+reconstructed imagery, not Track 1 mesh only.
+
+**ADR:** None — strategy decision; ADR-016 remains the rendering pipeline
+ADR and is unaffected. WS-F gains its own brief under Pillar 3.
+
+**Status:** Accepted — Dr. Mara Voss, April 2026.
+
+**Spec version:** Pending V1.2.0
+
+**Numbering note:** Originally requested as DEC-019. The log is
+append-only and DEC-019 was taken on 2026-04-28 by the Pillar 1 PATCH
+status endpoint decision. Subsequently DEC-022 was taken on 2026-04-29
+by the ADR-023 Schema Reservation acceptance entry. Renumbered to the
+next available slot (DEC-023).
+— Dr. Lin Park, Chief Rendering Architect
+
+---
+
 ## Unprocessed Content
 
 A set of variation files existed under `Master_Spec_Variations/variations/pending/`
