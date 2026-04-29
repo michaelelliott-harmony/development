@@ -1,0 +1,94 @@
+{
+  "type": "FeatureCollection",
+  "name": "central_coast_zoning_m6_fixture",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "Z001",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.330, -33.435],
+          [151.355, -33.435],
+          [151.355, -33.415],
+          [151.330, -33.415],
+          [151.330, -33.435]
+        ]]
+      },
+      "properties": {
+        "OBJECTID": 1001,
+        "PCO_REF_KEY": "PCO_CC_R2_GOSFORD_001",
+        "SYM_CODE": "R2",
+        "LAY_CLASS": "Low Density Residential",
+        "EPI_NAME": "Central Coast Local Environmental Plan 2022",
+        "LGA_NAME": "Central Coast"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z002",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.355, -33.435],
+          [151.370, -33.435],
+          [151.370, -33.420],
+          [151.355, -33.420],
+          [151.355, -33.435]
+        ]]
+      },
+      "properties": {
+        "OBJECTID": 1002,
+        "PCO_REF_KEY": "PCO_CC_E1_GOSFORD_002",
+        "SYM_CODE": "E1",
+        "LAY_CLASS": "National Parks and Nature Reserves",
+        "EPI_NAME": "Central Coast Local Environmental Plan 2022",
+        "LGA_NAME": "Central Coast"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z003",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.338, -33.422],
+          [151.348, -33.422],
+          [151.348, -33.418],
+          [151.338, -33.418],
+          [151.338, -33.422]
+        ]]
+      },
+      "properties": {
+        "OBJECTID": 1003,
+        "PCO_REF_KEY": "PCO_CC_B1_GOSFORD_003",
+        "SYM_CODE": "B1",
+        "LAY_CLASS": "Neighbourhood Centre",
+        "EPI_NAME": "Central Coast Local Environmental Plan 2022",
+        "LGA_NAME": "Central Coast"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z004",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.330, -33.415],
+          [151.345, -33.415],
+          [151.345, -33.408],
+          [151.330, -33.408],
+          [151.330, -33.415]
+        ]]
+      },
+      "properties": {
+        "OBJECTID": 1004,
+        "PCO_REF_KEY": "PCO_CC_RU1_GOSFORD_004",
+        "SYM_CODE": "RU1",
+        "LAY_CLASS": "Primary Production",
+        "EPI_NAME": "Central Coast Local Environmental Plan 2022",
+        "LGA_NAME": "Central Coast"
+      }
+    }
+  ]
+}

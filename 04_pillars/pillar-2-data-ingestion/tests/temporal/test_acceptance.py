@@ -350,8 +350,8 @@ class TestAC5FidelityReset:
                     }}
             return R()
 
-        with patch("harmony.pipelines.temporal.fidelity.requests.patch", side_effect=fake_patch):
-            with patch("harmony.pipelines.temporal.fidelity.requests.get", side_effect=fake_get):
+        with patch("harmony.pipelines.temporal.fidelity.httpx.patch", side_effect=fake_patch):
+            with patch("harmony.pipelines.temporal.fidelity.httpx.get", side_effect=fake_get):
                 result = reset_photorealistic_fidelity(
                     "hsam:r10:cc:ac5direct12345678",
                     p1_url="http://p1-stub",

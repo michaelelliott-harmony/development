@@ -1,0 +1,144 @@
+{
+  "type": "FeatureCollection",
+  "name": "central_coast_cadastre_m6_fixture",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "CAD001",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.3380, -33.4240],
+          [151.3400, -33.4240],
+          [151.3400, -33.4260],
+          [151.3380, -33.4260],
+          [151.3380, -33.4240]
+        ]]
+      },
+      "properties": {
+        "OBJECTID": 2001,
+        "cadid": "3456781",
+        "lotnumber": "1",
+        "sectionnumber": null,
+        "planlabel": "1//DP787786",
+        "shape_Area": 4840.5,
+        "createdate": "2003-06-15"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "CAD002",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.3400, -33.4240],
+          [151.3420, -33.4240],
+          [151.3420, -33.4260],
+          [151.3400, -33.4260],
+          [151.3400, -33.4240]
+        ]]
+      },
+      "properties": {
+        "OBJECTID": 2002,
+        "cadid": "3456782",
+        "lotnumber": "2",
+        "sectionnumber": null,
+        "planlabel": "2//DP787786",
+        "shape_Area": 4845.2,
+        "createdate": "2003-06-15"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "CAD003",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.3420, -33.4240],
+          [151.3440, -33.4240],
+          [151.3440, -33.4260],
+          [151.3420, -33.4260],
+          [151.3420, -33.4240]
+        ]]
+      },
+      "properties": {
+        "OBJECTID": 2003,
+        "cadid": "3456783",
+        "lotnumber": "3",
+        "sectionnumber": null,
+        "planlabel": "3//DP787786",
+        "shape_Area": 4831.8,
+        "createdate": "2003-06-15"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "CAD004",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.3380, -33.4260],
+          [151.3420, -33.4260],
+          [151.3420, -33.4290],
+          [151.3380, -33.4290],
+          [151.3380, -33.4260]
+        ]]
+      },
+      "properties": {
+        "OBJECTID": 2004,
+        "cadid": "3456784",
+        "lotnumber": "4",
+        "sectionnumber": null,
+        "planlabel": "4//DP787786",
+        "shape_Area": 7260.3,
+        "createdate": "2003-06-15"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "CAD005",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.3420, -33.4260],
+          [151.3460, -33.4260],
+          [151.3460, -33.4290],
+          [151.3420, -33.4290],
+          [151.3420, -33.4260]
+        ]]
+      },
+      "properties": {
+        "OBJECTID": 2005,
+        "cadid": "3456785",
+        "lotnumber": "5",
+        "sectionnumber": null,
+        "planlabel": "5//DP787786",
+        "shape_Area": 10890.1,
+        "createdate": "2003-06-15"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "CAD006",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.3380, -33.4180],
+          [151.3450, -33.4180],
+          [151.3450, -33.4220],
+          [151.3380, -33.4220],
+          [151.3380, -33.4180]
+        ]]
+      },
+      "properties": {
+        "OBJECTID": 2006,
+        "cadid": "3456786",
+        "lotnumber": "10",
+        "sectionnumber": "A",
+        "planlabel": "10A//SP99456",
+        "shape_Area": 15120.0,
+        "createdate": "2008-03-22"
+      }
+    }
+  ]
+}

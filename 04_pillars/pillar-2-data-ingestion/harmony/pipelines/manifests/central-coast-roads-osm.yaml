@@ -1,0 +1,60 @@
+# Harmony Pillar 2 — Dataset Manifest
+# OpenStreetMap — Road Network (Overpass API)
+# Licence: ODbL
+#
+# Highway filter: motorway through residential only (excludes footway,
+# cycleway, path, steps per p2-entity-schemas.md §Entity Type 4).
+
+dataset_name: osm_roads_central_coast
+dataset_version: "2026-04"
+description: "OpenStreetMap road network — Central Coast NSW via Overpass API"
+
+# --- Source ---
+source_type: osm_overpass
+source_query: >-
+  [out:json][timeout:180];
+  way["highway"~"^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|service|track|living_street|motorway_link|trunk_link|primary_link|secondary_link|tertiary_link)$"]
+  (-33.55,151.15,-33.15,151.75);
+  (._;>;);out body;
+source_bbox: [-33.55, 151.15, -33.15, 151.75]   # [south, west, north, east]
+source_crs: "EPSG:4326"   # OSM is always WGS84
+
+# --- Provenance (ADR-018, DEC-013) ---
+source_authority: openstreetmap
+source_tier: 2       # Tier 2 — Open Authoritative
+positional_accuracy_m: 3.0
+
+# --- Target ---
+target_entity_type: road_segment
+fidelity_class: structural
+region_code: cc
+resolution_level_floor: 8   # Road segments are longer than buildings — r08 floor
+
+# --- Deduplication ---
+# Road segments dedup by Hausdorff distance 5m + same highway classification
+dedup_strategy: hybrid
+dedup_source_id_field: null
+dedup_spatial_threshold_m: 5.0   # Hausdorff distance threshold for roads
+
+# --- Attribute mapping (source OSM tag → Harmony field) ---
+attribute_mapping:
+  highway: road_class
+  name: road_name
+  ref: road_ref
+  surface: surface_type
+  lanes: lane_count
+  maxspeed: speed_limit_kmh
+  oneway: is_oneway
+  bridge: is_bridge
+  tunnel: is_tunnel
+  lit: is_lit
+
+# --- known_names population (p2-entity-schemas.md §Entity Type 4) ---
+known_names_fields:
+  - name   # Road name (e.g. "Pacific Highway")
+  - ref    # Road reference (e.g. "A1")
+
+# --- Geometry ---
+allowed_geometry_types:
+  - LineString
+  - MultiLineString

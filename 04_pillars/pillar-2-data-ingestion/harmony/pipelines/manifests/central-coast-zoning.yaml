@@ -1,0 +1,54 @@
+# Harmony Pillar 2 — Dataset Manifest
+# NSW Planning Portal — EPI Land Zoning
+# Source: ArcGIS REST MapServer
+# Covers: Central Coast LGA land zoning under LEP 2022
+#
+# Endpoint validation (2026-04-19):
+#   - PCO_REF_KEY confirmed as stable unique identifier
+#   - 3,866 features in Central Coast bbox (3,718 within LGA)
+#   - Pagination required (exceededTransferLimit observed at 1000/page)
+
+dataset_name: nsw_epi_land_zoning_central_coast
+dataset_version: "2026-04"
+description: "NSW EPI Primary Planning Layers — Land Zoning for Central Coast LGA"
+
+# --- Source ---
+source_type: arcgis_rest
+source_url: "https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/0"
+source_bbox: [-33.55, 151.15, -33.15, 151.75]   # [south, west, north, east]
+source_crs: "EPSG:4326"
+source_where: "1=1"
+source_page_size: 1000
+
+# --- Provenance (ADR-018, DEC-013) ---
+source_authority: nsw_planning_portal
+source_tier: 1       # Tier 1 — Authoritative (NSW government)
+positional_accuracy_m: 5.0
+
+# --- Target ---
+target_entity_type: zoning_area
+fidelity_class: structural
+region_code: cc
+resolution_level_floor: 6   # Zoning polygons can span many km — r06 floor
+
+# --- Deduplication ---
+dedup_strategy: source_id
+dedup_source_id_field: PCO_REF_KEY   # Confirmed unique, stable, string key
+
+# --- Attribute mapping (source ArcGIS field → Harmony field) ---
+attribute_mapping:
+  SYM_CODE: zone_code
+  LAY_CLASS: zone_name
+  EPI_NAME: epi_name
+  LGA_NAME: lga_name
+  PCO_REF_KEY: source_feature_id
+
+# --- known_names population (p2-entity-schemas.md §Entity Type 1) ---
+known_names_fields:
+  - SYM_CODE     # e.g. "R2"
+  - LAY_CLASS    # e.g. "Low Density Residential"
+
+# --- Geometry ---
+allowed_geometry_types:
+  - Polygon
+  - MultiPolygon

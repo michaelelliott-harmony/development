@@ -19,7 +19,7 @@ import sqlite3
 from datetime import date, datetime
 from typing import Optional
 
-import requests
+import httpx
 
 from harmony.pipelines.temporal.models import (
     CellStatus,
@@ -235,7 +235,7 @@ def _update_cell_status_via_p1(
         payload["valid_from"] = str(valid_from)
 
     try:
-        resp = requests.patch(
+        resp = httpx.patch(
             f"{p1_url}/cells/{cell_key}/status",
             json=payload,
             timeout=10,
@@ -250,7 +250,7 @@ def _update_cell_status_via_p1(
             resp.text[:200],
         )
         return False
-    except requests.exceptions.RequestException as exc:
+    except (httpx.RequestError, httpx.HTTPStatusError) as exc:
         logger.warning("P1 cell_status update failed for %s: %s", cell_key, exc)
         return False
 
@@ -271,7 +271,7 @@ def _reset_fidelity_via_p1(cell_key: str, p1_url: str) -> bool:
         "captured_at": None,
     }
     try:
-        resp = requests.get(f"{p1_url}/resolve/cell-key/{cell_key}", timeout=10)
+        resp = httpx.get(f"{p1_url}/resolve/cell-key/{cell_key}", timeout=10)
         if resp.status_code == 200:
             data = resp.json()
             fc = data.get("fidelity_coverage") or {}
@@ -291,7 +291,7 @@ def _reset_fidelity_via_p1(cell_key: str, p1_url: str) -> bool:
     }
 
     try:
-        resp = requests.patch(
+        resp = httpx.patch(
             f"{p1_url}/cells/{cell_key}/fidelity",
             json=reset_body,
             timeout=10,
@@ -309,7 +309,7 @@ def _reset_fidelity_via_p1(cell_key: str, p1_url: str) -> bool:
             resp.text[:200],
         )
         return False
-    except requests.exceptions.RequestException as exc:
+    except (httpx.RequestError, httpx.HTTPStatusError) as exc:
         logger.warning("P1 fidelity reset failed for %s: %s", cell_key, exc)
         return False
 

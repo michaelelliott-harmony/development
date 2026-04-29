@@ -1,0 +1,61 @@
+# Harmony Pillar 2 — Dataset Manifest
+# OpenStreetMap — Building Footprints (Overpass API)
+# Licence: ODbL
+#
+# Overpass rate limit: 5-second minimum between requests (enforced by adapter)
+# For large extracts (>100k features), prefer Geofabrik PBF download via
+# file adapter. This manifest uses Overpass for programmatic access.
+
+dataset_name: osm_buildings_central_coast
+dataset_version: "2026-04"
+description: "OpenStreetMap building footprints — Central Coast NSW via Overpass API"
+
+# --- Source ---
+source_type: osm_overpass
+# The (._;>;) expands ways to include their nodes for geometry reconstruction.
+# out body; emits full tags + geometry info.
+source_query: '[out:json][timeout:180];way["building"](-33.55,151.15,-33.15,151.75);(._;>;);out body;'
+source_bbox: [-33.55, 151.15, -33.15, 151.75]   # [south, west, north, east]
+source_crs: "EPSG:4326"   # OSM is always WGS84
+
+# --- Provenance (ADR-018, DEC-013) ---
+source_authority: openstreetmap
+source_tier: 2       # Tier 2 — Open Authoritative (ODbL, formal OSM governance)
+positional_accuracy_m: 3.0   # Contributor-traced from aerial imagery
+
+# --- Target ---
+target_entity_type: building
+fidelity_class: structural
+region_code: cc
+resolution_level_floor: 10   # Building scale (~8.8m cell edge)
+
+# --- Deduplication ---
+# OSM buildings have stable way IDs as source_id (osm:way/{id})
+# Spatial proximity fallback for any cross-source duplicates
+dedup_strategy: hybrid
+dedup_source_id_field: null   # OSM ID is in source_id field directly
+dedup_spatial_threshold_m: 15.0
+
+# --- Attribute mapping (source OSM tag → Harmony field) ---
+attribute_mapping:
+  building: building_type
+  name: building_name
+  "addr:street": address_street
+  "addr:housenumber": address_number
+  "addr:postcode": address_postcode
+  "addr:suburb": address_suburb
+  height: height_m
+  "building:levels": levels
+  "roof:shape": roof_shape
+  start_date: observation_date
+
+# --- known_names population (p2-entity-schemas.md §Entity Type 3) ---
+known_names_fields:
+  - name             # Building name if tagged
+  - "addr:street"    # Street name (combined with addr:housenumber by extractor)
+  - "addr:housenumber"
+
+# --- Geometry ---
+allowed_geometry_types:
+  - Polygon
+  - MultiPolygon

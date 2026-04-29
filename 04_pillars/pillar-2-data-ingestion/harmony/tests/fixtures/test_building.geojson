@@ -1,0 +1,99 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "bld_001",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.300, -33.420],
+          [151.301, -33.420],
+          [151.301, -33.421],
+          [151.300, -33.421],
+          [151.300, -33.420]
+        ]]
+      },
+      "properties": {
+        "building": "residential",
+        "name": "Test House",
+        "addr:housenumber": "42",
+        "addr:street": "Test Street",
+        "height": "8.5"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bld_002",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.400, -33.350],
+          [151.402, -33.350],
+          [151.402, -33.352],
+          [151.400, -33.352],
+          [151.400, -33.350]
+        ]]
+      },
+      "properties": {
+        "building": "commercial",
+        "name": "Central Coast Plaza",
+        "addr:housenumber": "100",
+        "addr:street": "Main Road",
+        "building:levels": "3"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bld_003_unclosed",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.500, -33.300],
+          [151.501, -33.300],
+          [151.501, -33.301],
+          [151.500, -33.301]
+        ]]
+      },
+      "properties": {
+        "building": "yes",
+        "name": "Unclosed Ring Building"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bld_004_selfintersect",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.600, -33.250],
+          [151.602, -33.252],
+          [151.602, -33.250],
+          [151.600, -33.252],
+          [151.600, -33.250]
+        ]]
+      },
+      "properties": {
+        "building": "industrial",
+        "name": "Bowtie Building"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bld_005_zeroarea",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.300, -33.420],
+          [151.300, -33.420],
+          [151.300, -33.420],
+          [151.300, -33.420]
+        ]]
+      },
+      "properties": {
+        "building": "yes",
+        "name": "Zero Area Building"
+      }
+    }
+  ]
+}
